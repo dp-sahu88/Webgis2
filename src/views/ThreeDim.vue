@@ -3,16 +3,43 @@
     <div>{{ drones }}</div>
 </template>
 <script setup>
-import { Viewer, Cartesian3, Color } from 'cesium';
+import { Viewer, Cartesian3, Color,GeoJsonDataSource } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 const CesiumContainer = ref(null)
 const drones = ref([])
 let viewer = null
+let india
+let odisha
+let naguar 
 onMounted(() => {
     getData();
     viewer = new Viewer('cesiumContainer');
+    // india = viewer.dataSources.add(GeoJsonDataSource.load(
+    //   "/Indian_States.json",
+    //   {
+    //     stroke: Color.HOTPINK,
+    //     fill: Color.PINK.withAlpha(0.5),
+    //     strokeWidth: 3,
+    //   }
+    // ))
+    odisha = viewer.dataSources.add(GeoJsonDataSource.load(
+      "/Orissa.geojson",
+      {
+        stroke: Color.BLUE,
+        fill: Color.BLUEVIOLET.withAlpha(0.5),
+        strokeWidth: 3,
+      }
+    ))
+    naguar = viewer.dataSources.add(GeoJsonDataSource.load(
+      "/Naguar.geojson",
+      {
+        stroke: Color.BLUE,
+        fill: Color.BLUEVIOLET.withAlpha(0.5),
+        strokeWidth: 3,
+      }
+    ))
 })
 setInterval(getData, 5000);
 function viewerSetup(){
