@@ -1,64 +1,71 @@
 <template>
     <div id="cesiumContainer" ref="CesiumContainer"></div>
+    <div>{{ drones }}</div>
 </template>
 <script setup>
-import { Viewer, HeightReference, Cartesian3, JulianDate, ShadowMode, Terrain, Color, Math, Transforms, HeadingPitchRoll} from 'cesium';
+import { Viewer, Cartesian3, Color } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue';
+import axios from 'axios';
 const CesiumContainer = ref(null)
+const drones = ref([])
 let viewer = null
 onMounted(() => {
-    viewer = new Viewer('cesiumContainer', {
-        infoBox: false,
-        selectionIndicator: false,
-        shadows: true,
-        terrainShadows: ShadowMode.ENABLED,
-        shouldAnimate: true,
-        terrain: Terrain.fromWorldTerrain(),
-    });
-
-    const location = {
-        longitude: -1.31968,
-        latitude: 0.698874,
-        height: 74.14210186070714,
-        date: 2457522.154792,
-    }
-
-    const heading = Math.toRadians(45.0);
-const pitch = Math.toRadians(15.0);
-const roll = Math.toRadians(0.0);
-const position = Cartesian3.fromRadians(
-        location.longitude,
-        location.latitude,
-        location.height 
-)
-const orientation = Transforms.headingPitchRollQuaternion(
-  position,
-  new HeadingPitchRoll(heading, pitch, roll)
-);
-    const drone = viewer.entities.add({
-        name: "drone",
-        orientation:orientation,
-        position:position,
-        model: {
-            uri: "/drone/source/drone.glb",
-            scale:1.1,
-            // heightReference: HeightReference.CLAMP_TO_GROUND,
-        }
-        //     height: 20.0,
-        //   ellipsoid: {
-        //     radii: new Cartesian3(15.0, 15.0, 15.0),
-        //     material: Color.BLUE.withAlpha(0.5),
-        //     slicePartitions: 24,
-        //     stackPartitions: 36,
-        //     shadows: ShadowMode.ENABLED,
-        //   },
-    });
-    viewer.clock.currentTime = new JulianDate(location.date);
-    viewer.clock.multiplier = 1.0;
-    drone.show = true;
-    console.log(drone);
-    viewer.trackedEntity = drone;
+    getData();
+    viewer = new Viewer('cesiumContainer');
 })
+setInterval(getData, 5000);
+function viewerSetup(){
+    viewer.entities.removeAll();
+    drones.value.forEach(droneLocation => {
+        let drone = viewer.entities.add({
+            name: droneLocation.name,
+            // height: 20.0,
+            //   ellipsoid: {
+            //     radii: new Cartesian3(15.0, 15.0, 15.0),
+            //     material: Color.BLUE.withAlpha(0.5),
+            //     slicePartitions: 24,
+            //     stackPartitions: 36,
+            //   },
+            model: {
+                uri: '/Cesium_Air.glb'
+            }
+        });
+        let point = viewer.entities.add({
+            name: droneLocation.name+"_point_",
+            point: { pixelSize: 10, color: Color.RED }
+        });
+        let position = Cartesian3.fromDegrees(
+            droneLocation.longitude,
+            droneLocation.latitude,
+            droneLocation.height
+        )
+        point.position = position,
+        point.show = true;
+        drone.position = position,
+        drone.show = true;
+        // viewer.trackedEntity = drone
+    });
+}
+
+function  getData() {
+    axios
+        .get('http://localhost:8000/api/drone-positions')
+        .then((response) => {
+            let res = response.data.map(ele => {
+                return {
+                    longitude: Number(ele.long),
+                    latitude: Number(ele.lat),
+                    height: Number(ele.alt),
+                    date: ele.updated_at,
+                    name: ele.name
+                }
+            })
+            drones.value = res
+        })
+}
+
+watch(drones, (newVal, oldVal)=>{viewerSetup()})
+
 </script>
 <style scoped></style>
