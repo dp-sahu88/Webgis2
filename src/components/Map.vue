@@ -16,7 +16,16 @@
                 </ol-interaction-draw>
             </ol-source-vector>
         </ol-vector-layer>
-
+        <ol-vector-layer ref="nonRefreshDataLayer" title="staticData">
+            <ol-source-vector :features="nonRefreshData">
+                <ol-interaction-draw v-if="drawEnable" :type="drawType" @drawend="drawend" @drawstart="drawstart">
+                    <ol-style>
+                        <ol-style-stroke color="blue" :width="2"></ol-style-stroke>
+                        <ol-style-fill color="rgba(255, 255, 0, 0.4)"></ol-style-fill>
+                    </ol-style>
+                </ol-interaction-draw>
+            </ol-source-vector>
+        </ol-vector-layer>
 
         <ol-interaction-dragrotatezoom />
         <ol-mouseposition-control v-if="mousepositioncontrol" position="bottom" />
@@ -103,7 +112,7 @@
 </template>
   
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { GeoJSON } from "ol/format";
 import { useLayerSources } from "../stores/SourceList";
 import axios from "axios";
@@ -129,13 +138,29 @@ const showLayerSwitcherControl = ref(false)
 const showPrintDialogControl = ref(false)
 const showLayerSwitcherImageControl = ref(false)
 const layerSources = useLayerSources()
+const nonRefreshData = ref([])
+const nonRefreshDataLayer = ref(null)
 setInterval(getData, 5000);
 
 function getData() {
-    axios('./drones.geojson')
+    data.value = []
+    layerSources.sourceList.forEach(element => {
+        let source = element.source
+        if(element.refresh || !element.loaded)
+        console.log(source);
+         axios(source)
         .then((response) => {
-            data.value = new GeoJSON().readFeatures(response.data);
+            let newData = new GeoJSON().readFeatures(response.data)
+            if(element.refresh){
+                data.value = [...data.value, ...newData]
+            }
+            else{
+                nonRefreshData.value= [...nonRefreshData.value, ...newData]
+            }
         });
+        element.loaded=true
+    });
+   
 }
 getData();
 
@@ -150,7 +175,10 @@ const drawend = (event) => {
 onMounted(() => {
     layerList.value.push(osmLayer.value.tileLayer);
     layerList.value.push(dronesLayer.value.vectorLayer);
+    layerList.value.push(nonRefreshDataLayer.value.vectorLayer);
 });
+
+// watch(layerSources.sourceList, ()=>{getData()})
 </script>
   
 <style scoped>

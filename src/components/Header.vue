@@ -3,7 +3,7 @@
         <nav class=" bg-blue-600 flex flex-row justify-end">
            
             <div class="my-[1rem] flex mr-6 rounded-full shadow-lg ">
-                <div @click="refresh = !refresh" class="rounded-l-full cursor-pointer" :class="refresh?'bg-slate-400':'bg-blue-400'"><img src="../assets/refresh.svg" class="h-4 m-2"></div>
+                <div @click="refresh = !refresh" class="rounded-l-full cursor-pointer" :class="refresh?'bg-blue-400':'bg-slate-400'"><img src="../assets/refresh.svg" class="h-4 m-2"></div>
                 <input type="text" class="h-[2.1rem]" v-model="newSource" placeholder=" Add new source..." title="source can be a url or a valid file path">
                 <div @click="addSource" class="inline text-md bg-black text-white px-4 py-1 rounded-r-full cursor-pointer">ADD</div>
             </div> 
@@ -21,7 +21,7 @@ const newSource = ref('')
 const refresh = ref(false)
 const addSource = ()=>{
     if (newSource !=''){
-        layerSources.add({source:newSource.value, refresh:refresh})
+        layerSources.add({source:newSource.value, refresh:refresh.value, loaded:false})
         newSource.value= ''
         refresh.value= false
     }
