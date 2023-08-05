@@ -24,22 +24,22 @@ onMounted(() => {
     //     strokeWidth: 3,
     //   }
     // ))
-    odisha = viewer.dataSources.add(GeoJsonDataSource.load(
-      "/Orissa.geojson",
-      {
-        stroke: Color.BLUE,
-        fill: Color.BLUEVIOLET.withAlpha(0.5),
-        strokeWidth: 3,
-      }
-    ))
-    naguar = viewer.dataSources.add(GeoJsonDataSource.load(
-      "/Naguar.geojson",
-      {
-        stroke: Color.BLUE,
-        fill: Color.BLUEVIOLET.withAlpha(0.5),
-        strokeWidth: 3,
-      }
-    ))
+    // odisha = viewer.dataSources.add(GeoJsonDataSource.load(
+    //   "/Orissa.geojson",
+    //   {
+    //     stroke: Color.BLUE,
+    //     fill: Color.BLUEVIOLET.withAlpha(0.5),
+    //     strokeWidth: 3,
+    //   }
+    // ))
+    // naguar = viewer.dataSources.add(GeoJsonDataSource.load(
+    //   "/Naguar.geojson",
+    //   {
+    //     stroke: Color.BLUE,
+    //     fill: Color.BLUEVIOLET.withAlpha(0.5),
+    //     strokeWidth: 3,
+    //   }
+    // ))
 })
 setInterval(getData, 5000);
 function viewerSetup(){
