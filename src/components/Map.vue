@@ -158,7 +158,6 @@ function getData() {
     layerSources.sourceList.forEach(element => {
         let source = element.source
         if(element.refresh || !element.loaded)
-        console.log(source);
          axios(source)
         .then((response) => {
             let newData = new GeoJSON().readFeatures(response.data)
@@ -202,7 +201,6 @@ function setInteraction() {
     );
     map.value.getView().fit(vectorSource.getExtent());
   });
-  console.log(map.value)
   map.value.addInteraction(dragAndDropInteraction);
 }
 
