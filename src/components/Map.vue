@@ -1,5 +1,5 @@
 <template>
-    <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height: 70vh" class="">
+    <ol-map ref="mapRef" :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height: 70vh" class="">
         <ol-view ref="view" :center="center" :rotation="rotation" :zoom="zoom" :projection="projection" />
 
         <ol-tile-layer ref="osmLayer" title="OSM base layer">
@@ -113,12 +113,17 @@
   
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { GeoJSON } from "ol/format";
+import {GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
+import { Vector as VectorSource } from "ol/source";
+import {Vector as VectorLayer} from "ol/layer";
+import DragAndDrop from 'ol/interaction/DragAndDrop.js';
 import { useLayerSources } from "../stores/SourceList";
 import axios from "axios";
 const center = ref([116.547539, 40.450996]);
 const projection = ref("EPSG:4326");
 const zoom = ref(1);
+const map = ref(null)
+const mapRef = ref(null)
 const rotation = ref(0);
 const layerList = ref([]);
 const osmLayer = ref(null);
@@ -140,7 +145,13 @@ const showLayerSwitcherImageControl = ref(false)
 const layerSources = useLayerSources()
 const nonRefreshData = ref([])
 const nonRefreshDataLayer = ref(null)
+let dragAndDropInteraction;
+
+
+// refresh data in 5 sec
 setInterval(getData, 5000);
+
+//get data from external sources
 
 function getData() {
     data.value = []
@@ -164,6 +175,39 @@ function getData() {
 }
 getData();
 
+
+// set interaction to get the data by drag and drop action
+function setInteraction() {
+  if (dragAndDropInteraction) {
+    map.value.removeInteraction(dragAndDropInteraction);
+  }
+  dragAndDropInteraction = new DragAndDrop({
+    formatConstructors: [
+      GPX,
+      GeoJSON,
+      IGC,
+      // use constructed format to set options
+      new KML({extractStyles: true}),
+      TopoJSON,
+    ],
+  });
+  dragAndDropInteraction.on('addfeatures', function (event) {
+    const vectorSource = new VectorSource({
+      features: event.features,
+    });
+    map.value.addLayer(
+      new VectorLayer({
+        source: vectorSource,
+      })
+    );
+    map.value.getView().fit(vectorSource.getExtent());
+  });
+  console.log(map.value)
+  map.value.addInteraction(dragAndDropInteraction);
+}
+
+
+
 const drawstart = (event) => {
     console.log(event);
 };
@@ -173,9 +217,11 @@ const drawend = (event) => {
 };
 
 onMounted(() => {
+    map.value= mapRef.value.map
     layerList.value.push(osmLayer.value.tileLayer);
     layerList.value.push(dronesLayer.value.vectorLayer);
     layerList.value.push(nonRefreshDataLayer.value.vectorLayer);
+    setInteraction();
 });
 
 // watch(layerSources.sourceList, ()=>{getData()})
