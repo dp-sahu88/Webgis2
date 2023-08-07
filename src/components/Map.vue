@@ -114,7 +114,7 @@ import {GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
 import { Vector as VectorSource } from "ol/source";
 import {Vector as VectorLayer} from "ol/layer";
 import DragAndDrop from 'ol/interaction/DragAndDrop.js';
-import flyTo from '../utils/FlyTo2D.js'
+import flyTo from '../utils/ol/FlyTo2D.js'
 import { useLayerSources } from "../stores/SourceList";
 import axios from "axios";
 const center = ref([116.547539, 40.450996]);
