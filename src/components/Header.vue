@@ -2,7 +2,8 @@
     <header class="h-[4rem]">
         <nav class=" bg-blue-600 flex flex-row justify-end">
            <div class="h-[2rem] my-[1rem]">
-            <select class="w-6 h-[2.1rem] rounded-l-full border-2 border-red-500" >
+            <select class="w-6 h-[2.1rem] rounded-l-full border-2 border-red-500" v-model="sourceToRemove">
+                <option value="">---Base layer---</option>
                 <option v-for="source in layerSources.sourceList" :value="source.source" class="apperance-none focus:text-red-700">
                         {{source.source}} ⛔
                 </option>
@@ -21,10 +22,11 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { useLayerSources} from  '@/stores/SourceList.js'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 const layerSources = useLayerSources()
 const newSource = ref('')
 const refresh = ref(false)
+const sourceToRemove = ref("")
 const addSource = ()=>{
     if (newSource !=''){
         layerSources.add({source:newSource.value, refresh:refresh.value, loaded:false})
@@ -32,5 +34,14 @@ const addSource = ()=>{
         refresh.value= false
     }
 }
-
+const removeSource = ()=>{
+    let source = sourceToRemove.value
+    if (source == ""){
+        sourceToRemove.value = ""
+        return;
+    }
+    layerSources.remove(source)
+    sourceToRemove.value= ""
+}
+watch(sourceToRemove, ()=>{removeSource()} )
 </script>

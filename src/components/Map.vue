@@ -158,19 +158,60 @@ function getData() {
          axios(source)
         .then((response) => {
             let newData = new GeoJSON().readFeatures(response.data)
+            
             if(element.refresh){
                 data.value = [...data.value, ...newData]
             }
             else{
                 nonRefreshData.value= [...nonRefreshData.value, ...newData]
             }
-        });
-        element.loaded=true
+            let loc = newData[0].getGeometry().getExtent().slice(0,2)
+            if (element.loaded == false){
+                console.log(loc);
+                setTimeout(flyTo(loc, ()=>{}),5000)
+                element.loaded=true
+            }
+        }).catch((reason)=>{console.warn(reason)});
     });
    
 }
 getData();
 
+function flyTo(location, done) {
+  let view = map.value.getView()
+  const duration = 2000;
+  const zoom = view.getZoom();
+  let parts = 2;
+  let called = false;
+  function callback(complete) {
+    --parts;
+    if (called) {
+      return;
+    }
+    if (parts === 0 || !complete) {
+      called = true;
+      done(complete);
+    }
+  }
+  view.animate(
+    {
+      center: location,
+      duration: duration,
+    },
+    callback
+  );
+  view.animate(
+    {
+      zoom: zoom - 1,
+      duration: duration / 2,
+    },
+    {
+      zoom: zoom,
+      duration: duration / 2,
+    },
+    callback
+  );
+}
 
 // set interaction to get the data by drag and drop action
 function setInteraction() {
@@ -201,7 +242,10 @@ function setInteraction() {
   map.value.addInteraction(dragAndDropInteraction);
 }
 
-
+const resetMap = ()=> {
+    data.value = []
+    nonRefreshData.value = []
+}
 
 const drawstart = (event) => {
     console.log(event);
@@ -219,7 +263,7 @@ onMounted(() => {
     setInteraction();
 });
 
-// watch(layerSources.sourceList, ()=>{getData()})
+watch(layerSources.sourceList, ()=>{resetMap()})
 </script>
   
 <style scoped>
