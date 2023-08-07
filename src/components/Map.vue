@@ -115,6 +115,7 @@ import { Vector as VectorSource } from "ol/source";
 import {Vector as VectorLayer} from "ol/layer";
 import DragAndDrop from 'ol/interaction/DragAndDrop.js';
 import flyTo from '../utils/ol/FlyTo2D.js'
+import resolveSource from '../utils/ol/ResolveSourceType'
 import { useLayerSources } from "../stores/SourceList";
 import axios from "axios";
 const center = ref([116.547539, 40.450996]);
@@ -158,8 +159,9 @@ function getData() {
         if(element.refresh || !element.loaded)
          axios(source)
         .then((response) => {
-            let newData = new GeoJSON().readFeatures(response.data)
-            
+            // console.log(response.data)
+            let newData = resolveSource(response, element)
+            // console.log(newData)
             if(element.refresh){
                 data.value = [...data.value, ...newData]
             }
@@ -169,51 +171,14 @@ function getData() {
             let loc = newData[0].getGeometry().getExtent().slice(0,2)
             if (element.loaded == false){
                 let view = map.value.getView()
-                console.log(loc);
                 setTimeout(flyTo(loc, view ,()=>{}),5000)
                 element.loaded=true
             }
-        }).catch((reason)=>{console.warn(reason)});
+        }).catch((reason)=>{});
     });
    
 }
 getData();
-
-// function flyTo(location, done) {
-//   let view = map.value.getView()
-//   const duration = 2000;
-//   const zoom = view.getZoom();
-//   let parts = 2;
-//   let called = false;
-//   function callback(complete) {
-//     --parts;
-//     if (called) {
-//       return;
-//     }
-//     if (parts === 0 || !complete) {
-//       called = true;
-//       done(complete);
-//     }
-//   }
-//   view.animate(
-//     {
-//       center: location,
-//       duration: duration,
-//     },
-//     callback
-//   );
-//   view.animate(
-//     {
-//       zoom: zoom - 1,
-//       duration: duration / 2,
-//     },
-//     {
-//       zoom: zoom,
-//       duration: duration / 2,
-//     },
-//     callback
-//   );
-// }
 
 // set interaction to get the data by drag and drop action
 function setInteraction() {
