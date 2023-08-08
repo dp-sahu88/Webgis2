@@ -1,31 +1,51 @@
-import {GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
-
-export default function resolveSource(response, elememt){
-    if (200 > response.status || response.status >= 300){
-        return {error: response.statusText}
-    }
-    let res = {} 
+import { GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import axios from "axios";
+import { ref } from "vue";
+export default function resolveSource(elememt) {
+    let res = {}
+    let sourceType;
     let type = elememt.type
     switch (type) {
         case 'GeoJSON':
-            res = new GeoJSON().readFeatures(response.data)
+            sourceType = new GeoJSON()
             break;
         case 'TopoJSON':
-            res = new TopoJSON().readFeatures(response.data)
+            sourceType = new TopoJSON()
             break
         case 'GPX':
-            res = new GPX().readFeatures(response.data)
+            sourceType = new GPX()
             break
         case 'IGC':
-            res = new IGC().readFeatures(response.data)
+            sourceType = new IGC()
             break
         case 'KML':
-            res = new KML().readFeatures(response.data,{
+            sourceType = new KML({
                 extractStyles: true
-              })
+            })
     }
-    if (type == 'GeoJSON'){
-    } 
+    let name = 'l_' + elememt.source.replace(' ', '')
+    let source = new VectorSource({
+        url: elememt.source,
+        format: sourceType
+    })
+    let layer = new VectorLayer({
+        title: name,
+        name: name,
+        source: source
+    })
+    if (!elememt.focusOn) {
+        axios(elememt.source).then((response) => {
+            let features = sourceType.readFeatures(response.data)
+            let feature = features[0]
+            elememt.focusOn = feature.getGeometry().getExtent().slice(0, 2)
+        })
+    }
 
+    res = {
+        name: name,
+        layer: layer
+    }
     return res
 }
