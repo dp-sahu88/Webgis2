@@ -1,5 +1,5 @@
 <template>
-    <header class="h-[4rem]">
+    <header class="h-[4rem] w-[100%] absolute z-50">
         <nav class=" bg-blue-600 flex flex-row justify-end">
             <div class="h-[2rem] my-[1rem]">
                 <select class="w-6 h-[2.1rem] rounded-l-full border-2 border-red-500" v-model="sourceToRemove">
