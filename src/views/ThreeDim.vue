@@ -1,5 +1,5 @@
 <template>
-    <div id="cesiumContainer" ref="CesiumContainer"></div>
+    <div id="cesiumContainer" ref="CesiumContainer" class="pt-[4rem] h-[calc(100vh)]"></div>
 </template>
 <script setup>
 import { Viewer, Cartesian3, Color,GeoJsonDataSource } from 'cesium';
@@ -10,6 +10,10 @@ let viewer = null
 let drones = null
 onMounted(() => {
     viewer = new Viewer("cesiumContainer")
+    viewer.animation.container.style.visibility = 'hidden';
+    viewer.timeline.container.style.visibility = 'hidden';
+    viewer.bottomContainer.style.visibility = 'hidden'
+    viewer.forceResize();
     setData();
 })
 function setData (){
