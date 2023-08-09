@@ -3,12 +3,13 @@
         <nav class=" bg-blue-600 flex flex-row justify-end">
             <div class="h-[2.1rem] w-[2.1rem] bg-slate-50 mt-4 relative rounded-l-full" @click="sourceMenu = !sourceMenu">
                 <img src="../assets/icons/down-chevron.png" alt="" class="h-3 m-3" :class="sourceMenu?'rotate-180':''">
-                <div v-if="sourceMenu" class="absolute flex flex-col z-50 top-[2.2rem] bg-slate-300/40 backdrop-blur-sm rounded-md">
+                <div v-if="sourceMenu" class="absolute flex flex-col z-50 top-[2.2rem] bg-slate-600/40 backdrop-blur-sm rounded-md">
                     <div v-for="source in sourceList" :value="source.source"
-                        class="text-slate-700 hover:text-black">
+                        class="text-slate-200 hover:text-white">
                         <div class="flex flex-row gap-2 px-1">
                             <div @click="removeSource(source.source)" class="cursor-pointer w-4" ><img src="../assets/icons/delete.png" class="w-3 my-2 hover:rotate-12"></div>
                             <div @click="flyTo(source.focusOn,view,()=>{})" class="cursor-pointer w-4"><img src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>
+                            <div @click="tables.push(source)" class="cursor-pointer w-4"><img src="../assets/icons/table.png" class="w-3 my-2 hover:rotate-12 rounded"></div>
                             <div class="">{{ source.source }}</div>
                         </div>
                     </div>
@@ -35,12 +36,18 @@
             </RouterLink>
         </nav>
     </header>
+    <div class="absolute z-50 top-[4rem] m-6 rounded-md bg-slate-100/40 backdrop-blur-sm ">
+        <div v-for="table in tables">
+            <AttrTable :table="table" />
+        </div>
+    </div>
 </template>
 <script setup>
 import { RouterLink } from 'vue-router'
 import { useLayerSources } from '../stores/SourceList.js'
 import { useMap } from '../stores/Map';
 import resolveType from '../utils/ol/ResolveFileType'
+import AttrTable from './AttrTable.vue';
 import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import flyTo from '../utils/ol/FlyTo2D';
@@ -51,6 +58,7 @@ const {view} = storeToRefs(mapStore)
 const newSource = ref('')
 const newSourceType = ref('')
 const sourceMenu = ref(false)
+const tables = ref([])
 const formats = ['GPX', 'GeoJSON', 'TopoJSON', 'IGC', 'KML','']
 const acceptedTypes = {
     'gpx': 'GPX',

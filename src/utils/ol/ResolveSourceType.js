@@ -78,7 +78,6 @@ export default function resolveSource(elememt) {
         axios(elememt.source).then((response) => {
             let features = sourceType.readFeatures(response.data)
             let feature = features[0]
-            console.log(feature);
             elememt.focusOn = feature.getGeometry().getExtent().slice(0, 2)
         })
     }
