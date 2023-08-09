@@ -1,18 +1,22 @@
 <template>
     <header class="h-[4rem] w-[100%] absolute z-50">
         <nav class=" bg-blue-600 flex flex-row justify-end">
-            <div class="h-[2rem] my-[1rem]">
-                <select class="w-6 h-[2.1rem] rounded-l-full border-2 border-red-500" v-model="sourceToRemove">
-                    <option value="">---Base layer---</option>
-                    <option v-for="source in layerSources.sourceList" :value="source.source"
-                        class="apperance-none focus:text-red-700">
-                        {{ source.source }} ⛔
-                    </option>
-                </select>
+            <div class="h-[2.1rem] w-[2.1rem] bg-slate-50 mt-4 relative rounded-l-full" @click="sourceMenu = !sourceMenu">
+                <img src="../assets/icons/down-chevron.png" alt="" class="h-3 m-3" :class="sourceMenu?'rotate-180':''">
+                <div v-if="sourceMenu" class="absolute flex flex-col z-50 top-[2.2rem] bg-slate-300/40 backdrop-blur-sm rounded-md">
+                    <div v-for="source in sourceList" :value="source.source"
+                        class="text-slate-700 hover:text-black">
+                        <div class="flex flex-row gap-2 px-1">
+                            <div @click="removeSource(source.source)" class="cursor-pointer w-4" ><img src="../assets/icons/delete.png" class="w-3 my-2 hover:rotate-12"></div>
+                            <div @click="flyTo(source.focusOn,view,()=>{})" class="cursor-pointer w-4"><img src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>
+                            <div class="">{{ source.source }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="my-[1rem] flex mr-6 rounded-full shadow-lg ">
                 <div @click="refresh = !refresh" class="cursor-pointer h-[2.1rem]"
-                    :class="refresh ? 'bg-blue-400' : 'bg-slate-400'"><img src="../assets/refresh.svg" class="h-4 m-2">
+                    :class="refresh ? 'bg-blue-400' : 'bg-slate-400'"><img src="../assets/icons/refresh.svg" class="h-4 m-2">
                 </div>
                 <input type="text" class="h-[2.1rem]" v-model="newSource" placeholder=" Add new source..." @input="resolveSourceType"
                     title="source can be a url or a valid file path">
@@ -21,7 +25,7 @@
                     <option v-else v-for="format in newSourceType" :value="format">{{ format }}</option>
                 </select>
                 <div @click="addSource"
-                    class="inline text-md bg-black text-white px-4 py-1 rounded-r-full cursor-pointer h-[2.1rem]">ADD</div>
+                    class="inline text-md bg-slate-800 hover:bg-black text-white px-4 py-1 rounded-r-full cursor-pointer h-[2.1rem]">ADD</div>
             </div>
             <RouterLink to="/"
                 class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-4">2D
@@ -34,12 +38,19 @@
 </template>
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useLayerSources } from '@/stores/SourceList.js'
+import { useLayerSources } from '../stores/SourceList.js'
+import { useMap } from '../stores/Map';
 import resolveType from '../utils/ol/ResolveFileType'
 import { ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import flyTo from '../utils/ol/FlyTo2D';
 const layerSources = useLayerSources()
+const {sourceList} = storeToRefs(layerSources)
+const mapStore = useMap()
+const {view} = storeToRefs(mapStore)
 const newSource = ref('')
 const newSourceType = ref('')
+const sourceMenu = ref(false)
 const formats = ['GPX', 'GeoJSON', 'TopoJSON', 'IGC', 'KML','']
 const acceptedTypes = {
     'gpx': 'GPX',
@@ -69,14 +80,11 @@ const addSource =  () => {
         refresh.value = false
     }
 }
-const removeSource = () => {
-    let source = sourceToRemove.value
+const removeSource = (source) => {
     if (source == "") {
-        sourceToRemove.value = ""
         return;
     }
     layerSources.remove(source)
-    sourceToRemove.value = ""
 }
 
 const resolveSourceType = ()=>{

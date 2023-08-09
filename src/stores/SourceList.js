@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useLayerSources = defineStore('layerSources', () => {
-  const sourceList = ref([{source:'./drones.geojson',refresh:true, loaded:true, type: 'GeoJSON'}])
+  const sourceList = ref([{source:'./drones.geojson',refresh:false, loaded:false, type: 'GeoJSON'}])
   const refreshFlag = ref(false)
   const recentlyRemoved = ref('')
   // const doubleCount = computed(() => count.value * 2)

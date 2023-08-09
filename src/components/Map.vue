@@ -29,21 +29,21 @@
     </ol-map>
 
     <div @click="control=!control" class="absolute bottom-6 left-6 h-8 w-8 bg-blue-700 rounded-md">
-        <img src="../assets/tool.png" class="h-6 w-6 m-1 absolute" >
+        <img src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute" >
         <Transition name="rotate">
-            <img v-if="control" src="../assets/tool.png" class="h-6 w-6 m-1 absolute rotate-90" >
+            <img v-if="control" src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute rotate-90" >
         </Transition>
     </div>
     <Transition name="slideup">
         <div v-if="control" class="mx-4 mt-2 absolute bottom-4 left-10 bg-slate-100/40 backdrop-blur-sm rounded-lg lg:w-[40vw] p-6" >
             <div class=" flex flex-row flex-wrap gap-4" id="map-control">
-                <div class=" h-[3rem] flex flex-row  rounded-lg" :class="drawEnable ? 'bg-blue-600' : 'bg-blue-400'">
+                <div class=" h-[3rem] flex flex-row min-w-[17vw] rounded-lg justify-between" :class="drawEnable ? 'bg-blue-600' : 'bg-blue-400'">
                     <input type="checkbox" id="checkbox1" v-model="drawEnable" />
                     <label class="capitalize text-white p-[.75rem]" for="checkbox1">
                         Draw {{ drawEnable ? 'Disable' : 'Enable' }}
                     </label>
                     <select id="type" v-model="drawType"
-                        class="h-[3rem] rounded-lg border-solid border-2 border-slate-600 text-slate-100"
+                        class="h-[3rem] rounded-lg border-solid border-2 border-slate-600 text-slate-100 "
                         :class="drawEnable ? 'bg-blue-500' : 'bg-blue-400'">
                         <option value="Point">Point</option>
                         <option value="LineString">LineString</option>
@@ -119,13 +119,13 @@ import { Vector as VectorLayer } from "ol/layer";
 import DragAndDrop from 'ol/interaction/DragAndDrop.js';
 import flyTo from '../utils/ol/FlyTo2D.js'
 import resolveSource from '../utils/ol/ResolveSourceType'
+import { useMap } from "../stores/Map";
 import { useLayerSources } from "../stores/SourceList";
 import { storeToRefs } from "pinia";
 
 const center = ref([116.547539, 40.450996]);
 const projection = ref("EPSG:4326");
 const zoom = ref(1);
-const map = ref(null)
 const mapRef = ref(null)
 const rotation = ref(0);
 const control = ref(false)
@@ -146,6 +146,8 @@ const showPrintDialogControl = ref(false)
 const showLayerSwitcherImageControl = ref(false)
 const layerSources = useLayerSources()
 const { recentlyRemoved } = storeToRefs(layerSources)
+const mapStore = useMap()
+const {map, view} = storeToRefs(mapStore)
 let dragAndDropInteraction;
 
 // refresh data in 5 sec
@@ -166,9 +168,9 @@ function getData() {
             layerList.value.push(newLayer.layer)
             allLayers.value[newLayer.name] = newLayer.layer
             if (element.loaded == false) {
-                let loc = element.focusOn.value
-                let view = map.value.getView()
-                flyTo(element.focusOn.value, view, () => { })
+                let loc = element.focusOn?.value
+                view.value = map.value.getView()
+                flyTo(loc, view.value, () => { })
                 element.loaded = true
             }
         }
@@ -213,6 +215,7 @@ const drawend = (event) => {
 
 onMounted(() => {
     map.value = mapRef.value.map
+    view.value = map.value.getView()
     getData();
     layerList.value.push(osmLayer.value.tileLayer);
     setInteraction();
