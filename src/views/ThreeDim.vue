@@ -28,7 +28,7 @@ function setData (){
         strokeWidth: 3,
       }
     ))
-    console.log(viewer)
+    // console.log(viewer)
 }
 setInterval(setData, 5000);
 </script>
