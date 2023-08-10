@@ -3,7 +3,6 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style.js';
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import axios from "axios";
-import { ref } from "vue";
 export default function resolveSource(elememt) {
     let res = {}
     let sourceType;

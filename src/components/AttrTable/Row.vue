@@ -13,7 +13,7 @@ import flyTo from '../../utils/ol/FlyTo2D'
 import { useMap } from '../../stores/Map'
 import { storeToRefs } from 'pinia';
 const mapStore = useMap()
-const { view, map } = storeToRefs(mapStore)
+const { view } = storeToRefs(mapStore)
 const props = defineProps(['rowData', 'order'])
 const exclude = ["geometry"]
 const attrs = ref([])
