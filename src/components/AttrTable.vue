@@ -1,9 +1,9 @@
 <template>
     <div class="mt-1">
         <div class="bg-white/60 text-black min-w-[8rem] pr-1 rounded-t-md inline">
-            <div class="h-6 px-1 bg-red-700 rounded-tl-md text-center text-slate-300 hover:text-white inline w-fit"
+            <div class="h-6 px-1 bg-red-700 rounded-tl-md text-center text-slate-300 hover:text-white inline w-fit cursor-pointer"
                 @click="$emit('closeTable', table)">Close</div>
-            <div class="h-6 px-1 bg-slate-800 w-fit rounded-tr-md inline text-slate-300 hover:text-white "
+            <div class="h-6 px-1 bg-slate-800 w-fit rounded-tr-md inline text-slate-300 hover:text-white cursor-pointer "
                 @click="() => { minimized = !minimized }">{{ minimized ? 'Maximize' : 'Minimize' }}</div>
             {{ name.slice(0, 15) }}
         </div>
