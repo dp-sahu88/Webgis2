@@ -12,7 +12,7 @@
                                     src="../assets/icons/delete.png" class="w-3 my-2 hover:rotate-12"></div>
                             <div @click="flyTo(source.focusOn, view, () => { })" class="cursor-pointer w-4"><img
                                     src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>
-                            <div @click="tables.push(source)" class="cursor-pointer w-4"><img
+                            <div @click="()=>{addTable(source)}" class="cursor-pointer w-4"><img
                                     src="../assets/icons/table.png" class="w-3 my-2 hover:rotate-12 rounded"></div>
                             <div :title="source.source">{{ source.source.slice(0,20) }}</div>
                         </div>
@@ -101,6 +101,13 @@ const removeSource = (source) => {
     }
     layerSources.remove(source)
     removeTableBySource(source)
+}
+
+const addTable = (newTable)=>{
+    let exist =  tables.value.filter(element => element.source == newTable.source)
+    if(exist.length == 0){
+        tables.value.push(newTable)
+    }
 }
 
 const removeTable = (table) => {
