@@ -1,6 +1,7 @@
 <template>
     <header class="h-[4rem] w-[100%] absolute z-50">
-        <nav class=" bg-blue-600 flex flex-row justify-end">
+        <nav class="bg-gradient-to-r from-slate-900 to-blue-500 flex flex-row justify-end">
+            <img src="../assets/icons/Edall-logo.png" class="h-14 absolute flex-none left-10 top-3">
             <div class="h-[2.1rem] w-[2.1rem] bg-slate-50 mt-4 relative rounded-l-full" @click="sourceMenu = !sourceMenu">
                 <img src="../assets/icons/down-chevron.png" alt="" class="h-3 m-3" :class="sourceMenu ? 'rotate-180' : ''">
                 <div v-if="sourceMenu"
@@ -13,7 +14,7 @@
                                     src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>
                             <div @click="tables.push(source)" class="cursor-pointer w-4"><img
                                     src="../assets/icons/table.png" class="w-3 my-2 hover:rotate-12 rounded"></div>
-                            <div class="">{{ source.source }}</div>
+                            <div :title="source.source">{{ source.source.slice(0,20) }}</div>
                         </div>
                     </div>
                 </div>

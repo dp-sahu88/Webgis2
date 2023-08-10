@@ -10,7 +10,7 @@
     </div>
     <table v-if="!minimized"
         class="rounded-tr-md rounded-b-md bg-slate-100/50 backdrop-blur-sm hover:drop-shadow-sm hover:backdrop-blur-md ">
-        <tbody class=" flex flex-col overflow-y-scroll h-fit max-h-[50vh] p-3">
+        <tbody class=" flex flex-col overflow-auto h-fit max-h-[50vh] p-3">
             <Row v-for="feature in data" :row-data="feature" :order="attrs" />
         </tbody>
     </table>
@@ -28,7 +28,7 @@ const minimized = ref(false)
 const data = ref([])
 function getData() {
     axios(table.source).then(response => {
-        data.value = resolveSource(response, table)
+        data.value = resolveSource(response, table).slice(0,4000)
         attrs.value = data.value[0].getKeys()
     })
 }

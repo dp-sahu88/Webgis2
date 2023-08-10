@@ -40,6 +40,15 @@ export default function resolveSource(elememt) {
           fill: new Fill({
             color: 'rgba(0, 0, 255, 0.1)',
           }),
+        }),
+        'Polygon': new Style({
+          stroke: new Stroke({
+            color: 'blue',
+            width: 3,
+          }),
+          fill: new Fill({
+            color: 'rgba(0, 0, 255, 0.1)',
+          }),
         })
       };      
     switch (type) {
@@ -57,7 +66,7 @@ export default function resolveSource(elememt) {
             break
         case 'KML':
             sourceType = new KML({
-                extractStyles: false
+                extractStyles: true
             })
     }
     let name = 'l_' + elememt.source.replace(' ', '')
