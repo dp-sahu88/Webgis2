@@ -22,7 +22,7 @@ let loc = props.rowData.getGeometry().flatCoordinates
 let flyComplete = () => {
 
     view.value.animate({
-        zoom: 15,
+        zoom: 19,
         center:loc,
         duration: 450
     })

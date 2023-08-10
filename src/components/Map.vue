@@ -28,16 +28,18 @@
         <ol-printdialog-control v-if="showPrintDialogControl" />
     </ol-map>
 
-    <div @click="control=!control" class="absolute bottom-6 left-6 h-8 w-8 bg-blue-700 rounded-md">
-        <img src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute" >
+    <div @click="control = !control" class="absolute bottom-6 left-6 h-8 w-8 bg-blue-700 rounded-md">
+        <img src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute">
         <Transition name="rotate">
-            <img v-if="control" src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute rotate-90" >
+            <img v-if="control" src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute rotate-90">
         </Transition>
     </div>
     <Transition name="slideup">
-        <div v-if="control" class="mx-4 mt-2 absolute bottom-4 left-10 bg-slate-100/40 backdrop-blur-sm rounded-lg lg:w-[40vw] p-6" >
+        <div v-if="control"
+            class="mx-4 mt-2 absolute bottom-4 left-10 bg-slate-100/40 backdrop-blur-sm rounded-lg lg:w-[40vw] p-6">
             <div class=" flex flex-row flex-wrap gap-4" id="map-control">
-                <div class=" h-[3rem] flex flex-row min-w-[17vw] rounded-lg justify-between" :class="drawEnable ? 'bg-blue-600' : 'bg-blue-400'">
+                <div class=" h-[3rem] flex flex-row min-w-[17vw] rounded-lg justify-between"
+                    :class="drawEnable ? 'bg-blue-600' : 'bg-blue-400'">
                     <input type="checkbox" id="checkbox1" v-model="drawEnable" />
                     <label class="capitalize text-white p-[.75rem]" for="checkbox1">
                         Draw {{ drawEnable ? 'Disable' : 'Enable' }}
@@ -147,7 +149,7 @@ const showLayerSwitcherImageControl = ref(false)
 const layerSources = useLayerSources()
 const { recentlyRemoved } = storeToRefs(layerSources)
 const mapStore = useMap()
-const {map, view} = storeToRefs(mapStore)
+const { map, view } = storeToRefs(mapStore)
 let dragAndDropInteraction;
 
 // refresh data in 5 sec
@@ -216,6 +218,7 @@ const drawend = (event) => {
 onMounted(() => {
     map.value = mapRef.value.map
     view.value = map.value.getView()
+    layerSources.resetSourcelist()
     getData();
     layerList.value.push(osmLayer.value.tileLayer);
     setInteraction();
@@ -251,19 +254,19 @@ button:focus {
 
 .slideup-enter-active,
 .slideup-leave-active {
-  transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .slideup-enter-from,
 .slideup-leave-to {
-  left: 50%;
+    left: 50%;
     opacity: 0;
 }
 
 
 .rotate-enter-active,
 .rotate-leave-active {
-  transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .rotate-enter-from,

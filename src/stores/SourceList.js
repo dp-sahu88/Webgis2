@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useLayerSources = defineStore('layerSources', () => {
-  const sourceList = ref([{source:'./drones.geojson',refresh:false, loaded:false, type: 'GeoJSON'}])
+  const sourceList = ref([{source:'drones.geojson',refresh:false, loaded:false, type: 'GeoJSON'}])
   const refreshFlag = ref(false)
   const recentlyRemoved = ref('')
   // const doubleCount = computed(() => count.value * 2)
@@ -27,5 +27,5 @@ export const useLayerSources = defineStore('layerSources', () => {
     sourceList.value.forEach(ele=>ele.loaded=false)
     refreshFlag.value = !refreshFlag.value
   }
-  return { sourceList, remove, add, recentlyRemoved }
+  return { sourceList, remove, add, recentlyRemoved, resetSourcelist  }
 })
