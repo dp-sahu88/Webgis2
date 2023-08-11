@@ -1,8 +1,8 @@
 <template>
-  <div id="cesiumContainer" ref="CesiumContainer" class="h-[100vh] ph-[4rem]"></div>
+  <div id="cesiumContainer" ref="CesiumContainer" class="h-[100vh] pt-[4rem]"></div>
 </template>
 <script setup>
-import { Viewer, Cartesian3, Color, GeoJsonDataSource } from 'cesium';
+import { Viewer, Cartesian3, Color} from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
@@ -14,7 +14,7 @@ let odisha
 let naguar
 onMounted(() => {
   getData();
-  viewer = new Viewer('cesiumContainer');
+  viewer = new Viewer('cesiumContainer',{shouldAnimate: true});
   viewer.animation.container.style.visibility = 'hidden';
   viewer.timeline.container.style.visibility = 'hidden';
   viewer.bottomContainer.style.visibility = 'hidden'
