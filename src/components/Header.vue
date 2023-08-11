@@ -80,7 +80,6 @@ const refresh = ref(false)
 const sourceToRemove = ref("")
 const addSource = () => {
     if (newSource != '') {
-        newSourceType.value = resolveType(newSource.value, acceptedTypes)
         if (typeof (newSourceType.value) == 'array' || typeof (newSourceType.value) == 'object') {
             alert('there are muntiple possible types exist... select one')
             return
