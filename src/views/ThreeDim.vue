@@ -34,7 +34,8 @@ function viewerSetup() {
       //     stackPartitions: 36,
       //   },
       model: {
-        uri: '/Cesium_Air.glb'
+        uri: '/file-1592658408798.glb',
+        scale:10
       }
     });
     let point = viewer.entities.add({
