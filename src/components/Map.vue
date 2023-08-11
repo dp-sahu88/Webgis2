@@ -1,38 +1,20 @@
 <template>
-    <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height: 70vh">
+    <ol-map ref="mapRef" :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" class="pt-[4rem] h-[100vh]">
         <ol-view ref="view" :center="center" :rotation="rotation" :zoom="zoom" :projection="projection" />
-
         <ol-tile-layer ref="osmLayer" title="OSM base layer">
             <ol-source-osm />
+            <ol-interaction-draw v-if="drawEnable" :type="drawType" @drawend="drawend" @drawstart="drawstart">
+                <ol-style>
+                    <ol-style-stroke color="blue" :width="2"></ol-style-stroke>
+                    <ol-style-fill color="rgba(255, 255, 0, 0.4)"></ol-style-fill>
+                </ol-style>
+            </ol-interaction-draw>
         </ol-tile-layer>
-
-        <ol-vector-layer ref="dronesLayer" title="Drones">
-            <ol-source-vector>
-                <ol-interaction-draw v-if="drawEnable" :type="drawType" @drawend="drawend" @drawstart="drawstart">
-                    <ol-style>
-                        <ol-style-stroke color="blue" :width="2"></ol-style-stroke>
-                        <ol-style-fill color="rgba(255, 255, 0, 0.4)"></ol-style-fill>
-                    </ol-style>
-                </ol-interaction-draw>
-                <ol-feature v-for="coordinate in coordinates" :key="coordinate[0]">
-                    <ol-geom-point :coordinates="coordinate"></ol-geom-point>
-                    <ol-style>
-                        <ol-style-circle :radius="radius">
-                            <ol-style-fill :color="fillColor"></ol-style-fill>
-                            <ol-style-stroke :color="strokeColor" :width="strokeWidth"></ol-style-stroke>
-                        </ol-style-circle>
-                    </ol-style>
-                </ol-feature>
-            </ol-source-vector>
-        </ol-vector-layer>
-
-
         <ol-interaction-dragrotatezoom />
         <ol-mouseposition-control v-if="mousepositioncontrol" position="bottom" />
         <ol-fullscreen-control v-if="fullscreencontrol" />
         <ol-scaleline-control v-if="scalelinecontrol" />
         <ol-rotate-control v-if="rotatecontrol" />
-        <ol-zoom-control v-if="zoomcontrol" />
         <ol-zoomslider-control v-if="zoomslidercontrol" />
         <ol-zoomtoextent-control v-if="zoomtoextentcontrol" :extent="[23.906, 42.812, 46.934, 34.597]"
             tipLabel="Fit to Turkey" />
@@ -44,128 +26,186 @@
         <ol-layerswitcherimage-control v-if="showLayerSwitcherImageControl && layerList.length > 0" />
 
         <ol-printdialog-control v-if="showPrintDialogControl" />
-
-        <ol-toggle-control v-if="showToggleControl" :html="'log'"
-            :onToggle="($event) => console.log('ol-toggle-control: onToggle', $event)" />
     </ol-map>
-    <div class="mx-4 mt-2">
-        <div class=" flex flex-col">
-            <div>
-                <div class="mr-8 inline">
+
+    <div @click="control = !control" class="absolute bottom-6 left-6 h-8 w-8 bg-blue-700 rounded-md">
+        <img src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute">
+        <Transition name="rotate">
+            <img v-if="control" src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute rotate-90">
+        </Transition>
+    </div>
+    <Transition name="slideup">
+        <div v-if="control"
+            class="mx-4 mt-2 absolute bottom-4 left-10 bg-slate-100/40 backdrop-blur-sm rounded-lg lg:w-[40vw] p-6">
+            <div class=" flex flex-row flex-wrap gap-4" id="map-control">
+                <div class=" h-[3rem] flex flex-row min-w-[17vw] rounded-lg justify-between"
+                    :class="drawEnable ? 'bg-blue-600' : 'bg-blue-400'">
                     <input type="checkbox" id="checkbox1" v-model="drawEnable" />
-                    <label for="checkbox1">Draw Enable</label>
+                    <label class="capitalize text-white p-[.75rem]" for="checkbox1">
+                        Draw {{ drawEnable ? 'Disable' : 'Enable' }}
+                    </label>
+                    <select id="type" v-model="drawType"
+                        class="h-[3rem] rounded-lg border-solid border-2 border-slate-600 text-slate-100 "
+                        :class="drawEnable ? 'bg-blue-500' : 'bg-blue-400'">
+                        <option value="Point">Point</option>
+                        <option value="LineString">LineString</option>
+                        <option value="Polygon">Polygon</option>
+                        <option value="Circle">Circle</option>
+                    </select>
                 </div>
-                <select id="type" v-model="drawType">
-                    <option value="Point">Point</option>
-                    <option value="LineString">LineString</option>
-                    <option value="Polygon">Polygon</option>
-                    <option value="Circle">Circle</option>
-                </select>
-            </div>
-            <div class="mr-8 inline">
                 <input type="checkbox" id="checkbox2" v-model="fullscreencontrol" />
-                <label for="checkbox2">fullscreen control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="fullscreencontrol ? 'bg-blue-600' : 'bg-blue-400'" for="checkbox2">
+                    fullscreen control
+                </label>
+
                 <input type="checkbox" id="checkbox3" v-model="mousepositioncontrol" />
-                <label for="checkbox3">mouse position control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="mousepositioncontrol ? 'bg-blue-600' : 'bg-blue-400'" for="checkbox3">
+                    mouse position
+                </label>
+
                 <input type="checkbox" id="scaleline" v-model="scalelinecontrol" />
-                <label for="scaleline">ol-scaleline-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="scalelinecontrol ? 'bg-blue-600' : 'bg-blue-400'" for="scaleline">
+                    scaleline-control
+                </label>
+
                 <input type="checkbox" id="rotatecontrol" v-model="rotatecontrol" />
-                <label for="rotatecontrol">ol-rotate-control</label>
-            </div>
-            <div class="mr-8 inline">
-                <input type="checkbox" id="zoom" v-model="zoomcontrol" />
-                <label for="zoom">ol-zoom-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="rotatecontrol ? 'bg-blue-600' : 'bg-blue-400'" for="rotatecontrol">
+                    rotate-control
+                </label>
+
                 <input type="checkbox" id="zoomtoextent" v-model="zoomtoextentcontrol" />
-                <label for="zoomtoextent">ol-zoomtoextent-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="zoomtoextentcontrol ? 'bg-blue-600' : 'bg-blue-400'" for="zoomtoextent">zoom to extent</label>
+
+
                 <input type="checkbox" id="zoomslider" v-model="zoomslidercontrol" />
-                <label for="zoomslider">ol-zoomslider-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="zoomslidercontrol ? 'bg-blue-600' : 'bg-blue-400'" for="zoomslider">zoomslider</label>
+
+
                 <input type="checkbox" id="swipecontrol" v-model="showSwipeControl" />
-                <label for="swipecontrol">ol-swipe-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="showSwipeControl ? 'bg-blue-600' : 'bg-blue-400'" for="swipecontrol">swipe control</label>
+
+
                 <input type="checkbox" id="layerswitchercontrol" v-model="showLayerSwitcherControl" />
-                <label for="layerswitchercontrol">ol-layerswitcher-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="showLayerSwitcherControl ? 'bg-blue-600' : 'bg-blue-400'"
+                    for="layerswitchercontrol">layerswitcher</label>
+
+
                 <input type="checkbox" id="layerswitcherimagecontrol" v-model="showLayerSwitcherImageControl" />
-                <label for="layerswitcherimagecontrol">ol-layerswitcherimage-control</label>
-            </div>
-            <div class="mr-8 inline">
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="showLayerSwitcherImageControl ? 'bg-blue-600' : 'bg-blue-400'"
+                    for="layerswitcherimagecontrol">layerswitcher image</label>
+
+
                 <input type="checkbox" id="printdialogcontrol" v-model="showPrintDialogControl" />
-                <label for="printdialogcontrol">ol-printdialog-control</label>
-            </div>
-            <div class="mr-8 inline">
-                <input type="checkbox" id="togglecontrol" v-model="showToggleControl" />
-                <label for="togglecontrol">ol-toggle-control</label>
+                <label class="capitalize min-w-[17vw] text-white h-[3rem] flex flex-row rounded-lg p-[.75rem] "
+                    :class="showPrintDialogControl ? 'bg-blue-600' : 'bg-blue-400'"
+                    for="printdialogcontrol">printdialog-control</label>
             </div>
         </div>
-    </div>
-
-
-
-    <!-- <div>
-        {{ data }}
-    </div> -->
+    </Transition>
 </template>
   
 <script setup>
-import { ref, inject,onMounted } from "vue";
-import axios from 'axios';
+import { ref, onMounted, watch } from "vue";
+import { GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
+import { Vector as VectorSource } from "ol/source";
+import { Vector as VectorLayer } from "ol/layer";
+import DragAndDrop from 'ol/interaction/DragAndDrop.js';
+import flyTo from '../utils/ol/FlyTo2D.js'
+import resolveSource from '../utils/ol/ResolveSourceType'
+import { useMap } from "../stores/Map";
+import { useLayerSources } from "../stores/SourceList";
+import { storeToRefs } from "pinia";
+
 const center = ref([116.547539, 40.450996]);
 const projection = ref("EPSG:4326");
 const zoom = ref(1);
+const mapRef = ref(null)
 const rotation = ref(0);
-const radius = ref(2);
+const control = ref(false)
 const layerList = ref([]);
 const osmLayer = ref(null);
-const dronesLayer = ref(null)
-const strokeWidth = ref(10);
-const strokeColor = ref("red");
-const fillColor = ref("white");
-const coordinates = ref([]);
-const data = ref([]);
+const allLayers = ref({});
 const drawEnable = ref(false);
-const modifyEnabled = ref(false)
 const drawType = ref("Polygon");
 const fullscreencontrol = ref(true)
 const mousepositioncontrol = ref(true)
 const scalelinecontrol = ref(false)
 const showSwipeControl = ref(false)
 const rotatecontrol = ref(false)
-const zoomcontrol = ref(false)
 const zoomtoextentcontrol = ref(false)
 const zoomslidercontrol = ref(false)
 const showLayerSwitcherControl = ref(false)
 const showPrintDialogControl = ref(false)
-const showToggleControl = ref(false)
 const showLayerSwitcherImageControl = ref(false)
+const layerSources = useLayerSources()
+const { recentlyRemoved } = storeToRefs(layerSources)
+const mapStore = useMap()
+const { map, view } = storeToRefs(mapStore)
+let dragAndDropInteraction;
+
+// refresh data in 5 sec
 setInterval(getData, 5000);
 
+//get data from external sources
 function getData() {
-    axios
-        .get('http://localhost:8000/api/drone-positions')
-        .then((response) => {
-            let res = response.data.map(ele => {
-                return [ele.long, ele.lat]
-            })
-            data.value = res
-            coordinates.value = res
-        })
+    layerSources.sourceList.forEach(element => {
+        if (element.refresh || !element.loaded) {
+            let newLayer = resolveSource(element)
+            map.value.getLayers().forEach(layer => {
+                if (layer?.get('name') && layer?.get('name') == newLayer.name) {
+                    map.value.removeLayer(layer)
+                }
+            });
+            map.value.addLayer(newLayer.layer)
+            element.layername = newLayer.name
+            layerList.value.push(newLayer.layer)
+            allLayers.value[newLayer.name] = newLayer.layer
+            if (element.loaded == false) {
+                let loc = element.focusOn?.value
+                view.value = map.value.getView()
+                flyTo(loc, view.value, () => { })
+                element.loaded = true
+            }
+        }
+    });
 }
-getData();
 
+// set interaction to get the data by drag and drop action
+function setInteraction() {
+    if (dragAndDropInteraction) {
+        map.value.removeInteraction(dragAndDropInteraction);
+    }
+    dragAndDropInteraction = new DragAndDrop({
+        formatConstructors: [
+            GPX,
+            GeoJSON,
+            IGC,
+            new KML({ extractStyles: true }),
+            TopoJSON,
+        ],
+    });
+    dragAndDropInteraction.on('addfeatures', function (event) {
+        const vectorSource = new VectorSource({
+            features: event.features,
+        });
+        map.value.addLayer(
+            new VectorLayer({
+                source: vectorSource,
+            })
+        );
+        map.value.getView().fit(vectorSource.getExtent());
+    });
+    map.value.addInteraction(dragAndDropInteraction);
+}
 
 const drawstart = (event) => {
     console.log(event);
@@ -176,10 +216,24 @@ const drawend = (event) => {
 };
 
 onMounted(() => {
-  layerList.value.push(osmLayer.value.tileLayer);
-  layerList.value.push(dronesLayer.value.vectorLayer);
-  console.log(layerList.value);
+    map.value = mapRef.value.map
+    view.value = map.value.getView()
+    layerSources.resetSourcelist()
+    getData();
+    layerList.value.push(osmLayer.value.tileLayer);
+    setInteraction();
 });
+
+watch(recentlyRemoved, (newValue, oldValue) => {
+    let layername = newValue
+    map.value.getLayers().forEach(layer => {
+        if (layer?.get('name') && layer?.get('name') == layername) {
+            map.value.removeLayer(layer)
+        }
+    });
+    layerList.value = layerList.value.filter(layer => layer.get('name') != layername)
+    delete allLayers[layername]
+})
 </script>
   
 <style scoped>
@@ -192,5 +246,31 @@ button {
 button:hover,
 button:focus {
     background-color: lightgray;
+}
+
+#map-control input {
+    display: none;
+}
+
+.slideup-enter-active,
+.slideup-leave-active {
+    transition: all 0.5s ease;
+}
+
+.slideup-enter-from,
+.slideup-leave-to {
+    left: 50%;
+    opacity: 0;
+}
+
+
+.rotate-enter-active,
+.rotate-leave-active {
+    transition: all 0.5s ease;
+}
+
+.rotate-enter-from,
+.rotate-leave-to {
+    rotate: -90deg;
 }
 </style>

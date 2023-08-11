@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Bus Depots</name>
+    <Style id="icon-503-4186F0-normal">
+      <IconStyle>
+        <color>fff08641</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-4186F0-highlight">
+      <IconStyle>
+        <color>fff08641</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-4186F0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-4186F0-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-4186F0-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Depot 7</name>
+      <description>Subhashnagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.572359,12.978745,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 13</name>
+      <description>Katterguppe</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.456285,12.903874,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 18</name>
+      <description>Whitefield</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.541297,12.955062,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 25</name>
+      <description>H S R Layout</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.628151,12.9103,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 28</name>
+      <description>Hebbala</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.602057,12.939301,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 6</name>
+      <description>Indiranagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.634874,12.982387,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 19</name>
+      <description>Electronic City</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.71919,12.964725,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 24</name>
+      <description>K R Puram</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.690463,13.005174,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 29        </name>
+      <description>K R Puram</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.589418,13.034643,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 32</name>
+      <description>Surya City</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.70116,12.796383,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 38</name>
+      <description>Chikkanagamangala</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.687901,12.8584,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 39</name>
+      <description>Hoskote</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.687901,12.8584,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 41</name>
+      <description>Gunjur</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.722539,12.92411,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 8</name>
+      <description>Yeshwanthpur</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.557389,13.016438,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 9</name>
+      <description>Peenya</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.427632,13.065848,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 10 </name>
+      <description>Hennur</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.632007,13.026,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 11</name>
+      <description>Yelahanka</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.596003,13.099,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 14</name>
+      <description>R T Nagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.456285,12.903874,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 22</name>
+      <description>Peenya</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.445593,12.91565,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 23</name>
+      <description>Kalyana Nagara</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.634696,13.021001,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 26</name>
+      <description>Yeshwanthpur</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.5563,13.018142,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 30</name>
+      <description>Yelahanka</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.577035,13.109867,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 40</name>
+      <description>Nelamangala</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.374573,13.102234,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 43</name>
+      <description>Shivanapura</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.722539,12.92411,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 45</name>
+      <description>M.S.Palya</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.545771,13.080255,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 46</name>
+      <description>Sadenahalli</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.556555,13.193641,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 47</name>
+      <description>Manduru</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.733956,13.083836,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 2  </name>
+      <description>Shanti Nagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.59223,12.954632,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 3</name>
+      <description>Shanti Nagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.594032,12.955312,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 4</name>
+      <description>Jayanagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.592186,12.92471,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 15</name>
+      <description>Koramangala</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.576366,12.947793,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 20</name>
+      <description>Banashankari</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.570211,12.915389,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 27</name>
+      <description>Jigani</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.64257,12.783928,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 33</name>
+      <description>Poorna Pragna Layout</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.548994,12.932866,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 34</name>
+      <description>Kothannur Dinne</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.548994,12.932866,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 44</name>
+      <description>Anjanapura</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.403265,13.050696,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 12</name>
+      <description>Kengeri</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.565791,13.08692,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 16</name>
+      <description>Deepanjalinagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.526576,12.950756,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 17</name>
+      <description>Chandralayout</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.526576,12.950756,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 21</name>
+      <description>Rajarajeshwarinagar</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.498124,12.91545,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 31</name>
+      <description>Srigandhada kavalu</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.589418,13.034643,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 35</name>
+      <description>kannalli</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.4418363,12.9722222,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 36</name>
+      <description>Bidadi</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.379112,12.798592,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Depot 37</name>
+      <description>Kengeri</description>
+      <styleUrl>#icon-503-4186F0</styleUrl>
+      <Point>
+        <coordinates>
+          77.462021,12.900606,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
