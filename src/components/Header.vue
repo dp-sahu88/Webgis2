@@ -36,10 +36,10 @@
                     ADD</div>
             </div>
             <RouterLink to="/"
-                class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-4">2D
+                class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-8"  :class="$route.path=='/'? 'underline underline-offset-8':''">2D
             </RouterLink>
             <RouterLink to="/3d"
-                class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-4">3D
+                class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-8"  :class="$route.path=='/3d'? 'underline underline-offset-8':''">3D
             </RouterLink>
         </nav>
     </header>
