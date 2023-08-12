@@ -1,8 +1,7 @@
 <template>
     <tr>
-        <td @click="flyTo(loc, view, flyComplete)">{{ rowData.getGeometry().getType() }} <img src="../../assets/icons/target.png" class="h-5 float-right mx-2" alt=""></td>
-        <td v-for="attr in attrs" class="w-[30ch] text-center">
-            {{ rowData.get(attr) }}
+        <td @click="flyTo(loc, view, flyComplete)" class=" border-x-[1px] border-slate-300 max-w-[30ch] h-4 ">{{ rowData.getGeometry().getType() }} <img src="../../assets/icons/target.png" class="h-5 float-right mx-2" alt=""></td>
+        <td v-for="attr in attrs" :title="rowData.get(attr)" class=" text-center border-x-[1px] truncate max-w-[40ch] border-slate-300" v-html="rowData.get(attr)">
         </td>
     </tr>
 </template>
