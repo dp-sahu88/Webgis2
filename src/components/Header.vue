@@ -43,7 +43,7 @@
             </RouterLink>
         </nav>
     </header>
-    <div class="absolute z-50 top-[4rem] mx-8 ">
+    <div class="absolute z-50 top-[4rem] mx-8 max-h-[85vh] overflow-auto">
         <div v-for="table in tables">
             <AttrTable :table="table" :name="table.source" @close-table="removeTable" />
         </div>
@@ -122,3 +122,27 @@ const resolveSourceType = () => {
 watch(sourceToRemove, () => { removeSource() })
 
 </script>
+
+<style scoped>
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(0, 136, 255);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #4e94f5;
+}
+</style>
