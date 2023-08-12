@@ -43,7 +43,7 @@
             </RouterLink>
         </nav>
     </header>
-    <div class="absolute z-50 top-[4rem] mx-8 max-h-[85vh] overflow-auto">
+    <div class="absolute z-30 top-[4rem] mx-8 max-h-[85vh] overflow-auto">
         <div v-for="table in tables">
             <AttrTable :table="table" :name="table.source" @close-table="removeTable" />
         </div>
