@@ -28,7 +28,7 @@
         <ol-printdialog-control v-if="showPrintDialogControl" />
     </ol-map>
 
-    <div @click="control = !control" class="absolute bottom-6 left-6 h-8 w-8 bg-blue-700 rounded-md">
+    <div @click="control = !control" class="absolute bottom-6 left-6 h-8 w-8 bg-blue-700 rounded-md z-50">
         <img src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute">
         <Transition name="rotate">
             <img v-if="control" src="../assets/icons/tool.png" class="h-6 w-6 m-1 absolute rotate-90">
@@ -36,7 +36,7 @@
     </div>
     <Transition name="slideup">
         <div v-if="control"
-            class="mx-4 mt-2 absolute bottom-4 left-10 bg-slate-100/40 backdrop-blur-sm rounded-lg lg:w-[40vw] p-6">
+            class="mx-4 mt-2 absolute bottom-4 left-10 bg-slate-100/40 backdrop-blur-sm rounded-lg lg:w-[40vw] p-6 z-50">
             <div class=" flex flex-row flex-wrap gap-4" id="map-control">
                 <div class=" h-[3rem] flex flex-row min-w-[17vw] rounded-lg justify-between"
                     :class="drawEnable ? 'bg-blue-600' : 'bg-blue-400'">
