@@ -14,7 +14,7 @@
                                     src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>
                             <div @click="()=>{addTable(source)}" class="cursor-pointer w-4"><img
                                     src="../assets/icons/table.png" class="w-3 my-2 hover:rotate-12 rounded"></div>
-                            <div :title="source.source">{{ source.source.slice(0,20) }}</div>
+                            <div :title="source.source" @click="mapStore.addToSelectedLayer(source.layername)" :class="selectedLayer==source.layername ? 'font-bold text-white':''">{{ source.source.slice(0,20) }}</div>
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@ import flyTo from '../utils/ol/FlyTo2D';
 const layerSources = useLayerSources()
 const { sourceList } = storeToRefs(layerSources)
 const mapStore = useMap()
-const { view } = storeToRefs(mapStore)
+const { view, selectedLayer } = storeToRefs(mapStore)
 const newSource = ref('')
 const newSourceType = ref('')
 const sourceMenu = ref(false)
