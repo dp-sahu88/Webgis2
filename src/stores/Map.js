@@ -4,5 +4,6 @@ import { defineStore } from 'pinia'
 export const useMap = defineStore('mapStore', () => {
   const map = ref({})  
   const view = ref({})
-  return { map, view }
+  const selectedLayer = ref({})
+  return { map, view , selectedLayer}
 })
