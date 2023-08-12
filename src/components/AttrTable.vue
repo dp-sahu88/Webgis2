@@ -8,12 +8,17 @@
             {{ name.slice(0, 15) }}
         </div>
     </div>
-    <table v-if="!minimized"
-        class="rounded-tr-md rounded-b-md bg-slate-100/50 backdrop-blur-sm hover:drop-shadow-sm hover:backdrop-blur-md ">
-        <tbody class=" flex flex-col overflow-auto h-fit max-h-[50vh] p-3">
-            <Row v-for="feature in data" :row-data="feature" :order="attrs" />
-        </tbody>
-    </table>
+    <div class=" max-w-[95vw] overflow-auto">
+        <table v-if="!minimized"
+            class=" bg-slate-200/50 hover:bg-slate-100/50 text-black table-auto hover:drop-shadow-sm hover:backdrop-blur-sm">
+            <tbody class="block overflow-auto max-h-[80vh] ">
+                <tr class="sticky top-[-0.25rem] bg-blue-400">
+                    <td v-for="attr in attrs" class="font-bold border border-white" :key="attr"> {{ attr }} </td>
+                </tr>
+                <Row v-for="feature in data" :row-data="feature" :order="attrs" />
+            </tbody>
+        </table>
+    </div>
 </template>
 <script setup>
 import { GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
@@ -28,7 +33,7 @@ const minimized = ref(false)
 const data = ref([])
 function getData() {
     axios(table.source).then(response => {
-        data.value = resolveSource(response, table).slice(0,4000)
+        data.value = resolveSource(response, table).slice(0, 3000)
         attrs.value = data.value[0].getKeys()
     })
 }
@@ -69,6 +74,7 @@ function resolveSource(response, elememt) {
 <style scoped>
 ::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
 }
 
 /* Track */
