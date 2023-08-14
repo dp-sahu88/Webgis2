@@ -8,7 +8,7 @@
                     class="absolute flex flex-col z-50 top-[2.2rem] bg-slate-600/40 backdrop-blur-sm rounded-md">
                     <div v-for="source in sourceList" :value="source.source" class="text-slate-200 hover:text-white">
                         <div class="flex flex-row gap-2 px-1">
-                            <div @click="removeSource(source.source)" class="cursor-pointer w-4"><img
+                            <div @click="()=>{removeSource(source.source);mapStore.removeSelectedLayer(source.layername)}" class="cursor-pointer w-4"><img
                                     src="../assets/icons/delete.png" class="w-3 my-2 hover:rotate-12"></div>
                             <div @click="flyTo(source.focusOn, view, () => { })" class="cursor-pointer w-4"><img
                                     src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>

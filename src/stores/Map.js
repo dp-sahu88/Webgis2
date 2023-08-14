@@ -10,8 +10,7 @@ export const useMap = defineStore('mapStore', () => {
       if (layername == undefined){
         return
       }else if (selectedLayer.value == layername) {
-        selectedLayer.value = ''
-        selectedLayerObj.value = {}
+        removeSelectedLayer(layername)
         return
       }
       map.value.getLayers().forEach(function (layer) {
@@ -21,5 +20,11 @@ export const useMap = defineStore('mapStore', () => {
         }
       });
   }
-  return { map, view, selectedLayer, selectedLayerObj, addToSelectedLayer}
+  function removeSelectedLayer(layername){
+    if (selectedLayer.value == layername){
+      selectedLayer.value = ''
+      selectedLayerObj.value = {}
+    }
+}
+  return { map, view, selectedLayer, selectedLayerObj, addToSelectedLayer , removeSelectedLayer}
 })
