@@ -111,6 +111,7 @@
             </div>
         </div>
     </Transition>
+    <HitDetection :pixel="pixel" />
 </template>
   
 <script setup>
@@ -124,6 +125,7 @@ import resolveSource from '../utils/ol/ResolveSourceType'
 import { useMap } from "../stores/Map";
 import { useLayerSources } from "../stores/SourceList";
 import { storeToRefs } from "pinia";
+import HitDetection from "./HitDetection.vue";
 
 const center = ref([116.547539, 40.450996]);
 const projection = ref("EPSG:4326");
@@ -150,6 +152,7 @@ const layerSources = useLayerSources()
 const { recentlyRemoved } = storeToRefs(layerSources)
 const mapStore = useMap()
 const { map, view } = storeToRefs(mapStore)
+const pixel = ref([])
 let dragAndDropInteraction;
 
 // refresh data in 5 sec
@@ -219,6 +222,15 @@ onMounted(() => {
     map.value = mapRef.value.map
     view.value = map.value.getView()
     layerSources.resetSourcelist()
+    map.value.on('click', function (evt) {
+        pixel.value = evt.pixel
+    });
+    map.value.on('pointermove', function (evt) {
+        if (evt.dragging) {
+            return;
+        }
+        pixel.value = map.value.getEventPixel(evt.originalEvent);
+    });
     getData();
     layerList.value.push(osmLayer.value.tileLayer);
     setInteraction();
