@@ -22,7 +22,7 @@ const mapStore = useMap()
 const { map, selectedLayerObj, selectedLayer } = storeToRefs(mapStore)
 const highlightStyle = new Style({
     stroke: new Stroke({
-        color: 'rgba(255, 0, 0, 0.7)',
+        color: 'rgba(255, 0, 0, 1)',
         width: 2,
     }),
 });
