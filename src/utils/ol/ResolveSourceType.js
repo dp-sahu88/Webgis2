@@ -66,7 +66,7 @@ export default function resolveSource(elememt) {
             break
         case 'KML':
             sourceType = new KML({
-                extractStyles: true
+                extractStyles: false
             })
     }
     let name = 'l_' + elememt.source.replace(' ', '')
