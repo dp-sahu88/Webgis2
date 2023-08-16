@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TwoDim from '../views/TwoDim.vue'
 import ThreeDim from '../views/ThreeDim.vue'
+import Login from '../views/login.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,6 +14,10 @@ const router = createRouter({
       path: '/3d',
       name: '3d',
       component: ThreeDim
+    },{
+      path: '/login',
+      name: 'login',
+      component: Login 
     }
     // ,
     // {
