@@ -1,48 +1,6 @@
 <template>
     <div class="h-[100vh] w-[100vw] pt-[4rem] bg-black">
-        <div class="absolute flex flex-row">
-            <div class=" relative overflow-hidden h-[calc(100vh-4rem)] w-[50vw]">
-                <div
-                    class=" anim-bar h-8 w-[45vw] mt-[3rem] relative left-[-3rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-12 w-[45vw] mt-[3rem] relative left-[-6rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-14 w-[45vw] mt-[3rem] relative left-[-7rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-10 w-[45vw] mt-[3rem] relative left-[-3rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-8 w-[45vw] mt-[3rem] relative left-[-4rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-10 w-[45vw] mt-[3rem] relative left-[-2rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-            </div>
-            <div class=" relative overflow-hidden h-[calc(100vh-4rem)] rotate-180 w-[50vw]">
-                <div
-                    class=" anim-bar h-8 w-[45vw] mt-[3rem] relative left-[-3rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-12 w-[45vw] mt-[3rem] relative left-[-6rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-14 w-[45vw] mt-[3rem] relative left-[-7rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-10 w-[45vw] mt-[3rem] relative left-[-3rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-8 w-[45vw] mt-[3rem] relative left-[-4rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-                <div
-                    class=" anim-bar h-10 w-[45vw] mt-[3rem] relative left-[-2rem] bg-gradient-to-l from-indigo-400 hover:from-indigo-400/90   to-black via-blue-900 rounded-full">
-                </div>
-            </div>
-        </div>
-
+        <AnimatedBG />
         <div
             class="m-auto relative z-10 w-fit top-20 py-4 px-6 bg-slate-300/50 backdrop-blur-sm rounded-md border focus-within:bg-slate-300/60">
             <h1 class="text-4xl font-bold text-center my-6 text-white">Login</h1>
@@ -66,6 +24,8 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import AnimatedBG from '../components/background/AnimatedBG.vue';
+import router from '../router';
 const email = ref('')
 const password = ref('')
 
@@ -87,38 +47,15 @@ const login = () => {
 
     axios.request(config)
         .then((response) => {
-            console.log(JSON.stringify(response.data));
+            if (response.data.success) {
+                let cred = JSON.stringify(response.data.data);
+                localStorage.setItem("user", cred);
+                router.push({ path: '/' })
+            }
         })
         .catch((error) => {
             console.log(error);
         });
 }
 </script>
-<style scoped>
-.anim-bar {
-    animation: anim-bar 2s ease infinite;
-}
-
-.anim-bar:nth-child(2n+1) {
-    animation-delay: 0.1s;
-    animation-duration: 1.8s;
-}
-
-@keyframes anim-bar {
-    0% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-10%);
-    }
-
-    50% {
-        transform: translateX(-20%);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
-}
-</style>
+<style scoped></style>
