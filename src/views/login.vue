@@ -1,6 +1,6 @@
 <template>
     <div class="h-[100vh] w-[100vw] pt-[4rem] bg-black">
-        <AnimatedBG/>
+        <AnimatedBG />
         <div
             class="m-auto relative z-10 w-fit top-20 py-4 px-6 bg-slate-300/50 backdrop-blur-sm rounded-md border focus-within:bg-slate-300/60">
             <h1 class="text-4xl font-bold text-center my-6 text-white">Login</h1>
@@ -25,6 +25,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import AnimatedBG from '../components/background/AnimatedBG.vue';
+import router from '../router';
 const email = ref('')
 const password = ref('')
 
@@ -46,12 +47,15 @@ const login = () => {
 
     axios.request(config)
         .then((response) => {
-            console.log(JSON.stringify(response.data));
+            if (response.data.success) {
+                let cred = JSON.stringify(response.data.data);
+                localStorage.setItem("user", cred);
+                router.push({ path: '/' })
+            }
         })
         .catch((error) => {
             console.log(error);
         });
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>
