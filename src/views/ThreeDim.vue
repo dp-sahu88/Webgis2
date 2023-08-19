@@ -56,8 +56,9 @@ function viewerSetup() {
 }
 
 function getData() {
+  let url = import.meta.env.VITE_API_URL + '/drone-positions'
   axios
-    .get('http://192.168.1.9:8000/api/drone-positions')
+    .get(url)
     .then((response) => {
       let res = response.data.features.map(ele => {
         let coordinates = ele.geometry.coordinates
