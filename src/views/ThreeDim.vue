@@ -1,41 +1,42 @@
 <template>
   <div id="cesiumContainer" ref="CesiumContainer" class="h-[100vh] pt-[4rem]"></div>
+  <div class="absolute bottom-10 right-2" @click="toggleDraw">🖌</div>
+  <div v-if="draw" class="absolute flex flex-col item-center pointer-events-none" :style="pinPosition" >
+    <div class="h-4 w-4 rounded-full bg-red-600 "></div>
+    <div class="h-[45px] w-[2px] bg-black m-auto"></div>
+  </div>
 </template>
 <script setup>
-import { Viewer, Cartesian3, Color} from 'cesium';
+import { Viewer, Cartesian3, Color } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
+import { viewerAddDrawEventListener, viewerRemoveDrawEventListener   } from '../utils/cesium/Draw'
 const CesiumContainer = ref(null)
 const drones = ref([])
+const draw = ref(false)
 let viewer = null
-let india
-let odisha
-let naguar
+const pinPosition = ref({left:0, top:0})
 onMounted(() => {
   getData();
-  viewer = new Viewer('cesiumContainer',{shouldAnimate: true});
+  viewer = new Viewer('cesiumContainer', { shouldAnimate: true });
   viewer.animation.container.style.visibility = 'hidden';
   viewer.timeline.container.style.visibility = 'hidden';
   viewer.bottomContainer.style.visibility = 'hidden'
-  // viewer.forceResize();
+  CesiumContainer.value.addEventListener('mousemove',updatePinPosition)
 })
 setInterval(getData, 5000);
 function viewerSetup() {
+  if (draw.value==true) {
+    return;
+  }
   viewer.entities.removeAll();
   drones.value.forEach(droneLocation => {
     let drone = viewer.entities.add({
       name: droneLocation.name,
-      // height: 20.0,
-      //   ellipsoid: {
-      //     radii: new Cartesian3(15.0, 15.0, 15.0),
-      //     material: Color.BLUE.withAlpha(0.5),
-      //     slicePartitions: 24,
-      //     stackPartitions: 36,
-      //   },
       model: {
         uri: '/file-1592658408798.glb',
-        scale:10
+        scale: 10
       }
     });
     let point = viewer.entities.add({
@@ -48,9 +49,9 @@ function viewerSetup() {
       droneLocation.height
     )
     point.position = position,
-    point.show = true;
+      point.show = true;
     drone.position = position,
-    drone.show = true;
+      drone.show = true;
     // viewer.trackedEntity = drone
   });
 }
@@ -77,6 +78,18 @@ function getData() {
       })
       drones.value = res
     })
+}
+
+const toggleDraw = function () {
+  draw.value ?
+    viewerRemoveDrawEventListener(viewer) :
+    viewerAddDrawEventListener(viewer);
+  draw.value = !draw.value
+}
+
+const updatePinPosition = (event)=>{
+    pinPosition.value.left = event.clientX-8+'px'
+    pinPosition.value.top = event.clientY+'px'
 }
 
 watch(drones, (newVal, oldVal) => { viewerSetup() })
