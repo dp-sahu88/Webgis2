@@ -1,8 +1,8 @@
 <template>
-    <div class="px-3 rounded-md relative" :class="getClassStr()">
+    <div class="px-3 rounded-md relative mt-2" :class="getClassStr()">
         <div v-if="notification.closable" @click="close" class="absolute right-2 top-2"> X</div>
-        <div class="font-bold my-2">{{notification.title}}</div>
-        <div class="">{{notification.content}}</div>
+        <div class="font-bold my-2 w-[20ch] truncate ">{{notification.title}}</div>
+        <div class=" w-[28ch] ">{{notification.content}}</div>
     </div>
 </template>
 
@@ -67,7 +67,6 @@
     }
     const getClassStr = () =>{
         let classStr =  getBg() + ' ' + getColor() + ' ' + getBorder()
-        console.log(classStr)
         return classStr
     }
 </script>
