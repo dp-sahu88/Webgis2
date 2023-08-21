@@ -37,6 +37,8 @@ import { ref } from 'vue';
 import axios from 'axios';
 import router from '../router';
 import AnimatedBG from '../components/background/AnimatedBG.vue';
+import { useNotification } from '../stores/Notification';
+const notification = useNotification()
 const name = ref('');
 const email = ref('')
 const password = ref('')
@@ -64,11 +66,28 @@ const register = () => {
             if (response.data.success) {
                 let cred = JSON.stringify(response.data.data);
                 localStorage.setItem("user", cred);
+                notification.pushNotification({
+                    type:'success',
+                    title: 'Signup',
+                    closable: true,
+                    content : 'registration completed'
+                });
                 router.push({ path: '/' })
+            }else{
+                notification.pushNotification({
+                    type: 'error',
+                    title: 'Signup',
+                    content : response.data.message
+                });
             }
         })
         .catch((error) => {
             console.log(error);
+            notification.pushNotification({
+                type: 'error',
+                title: 'Signup',
+                content : error.response.data.message
+            })
         });
 }
 </script>
