@@ -54,15 +54,15 @@
     const getColor = () =>{
         switch (type.value) {
             case 'error':
-                return 'text-red-500'
+                return 'text-red-800'
             case'success':
-                return 'text-green-500'
+                return 'text-green-800'
             case 'info':
-                return 'text-blue-500'
+                return 'text-blue-800'
             case 'warning':
-                return 'text-yellow-500'
+                return 'text-yellow-800'
             default:
-                return 'text-gray-500'
+                return 'text-gray-800'
         }
     }
     const getClassStr = () =>{
