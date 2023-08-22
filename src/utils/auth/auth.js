@@ -95,7 +95,7 @@ export function register(name,email,password,c_password) {
 
 export function logout() {
     localStorage.removeItem("user");
-    router.push({ path: '/' })
+    router.push({ path: '/login' })
 }
 
 export function getToken(){

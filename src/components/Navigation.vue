@@ -1,5 +1,5 @@
 <template>
-    <div class="h-[2.1rem] w-[2.1rem] bg-slate-50 mt-4 relative rounded-l-full" @click="sourceMenu = !sourceMenu">
+    <div class="h-[2.1rem] w-[2.1rem] bg-slate-50 mt-4 relative rounded-l-full"  @click="sourceMenu = !sourceMenu">
         <img src="../assets/icons/down-chevron.png" alt="" class="h-3 m-3" :class="sourceMenu ? 'rotate-180' : ''">
         <div v-if="sourceMenu" class="absolute flex flex-col z-50 top-[2.2rem] bg-slate-600/40 backdrop-blur-sm rounded-md">
             <div v-for="source in sourceList" :value="source.source" class="text-slate-200 hover:text-white">
@@ -9,16 +9,17 @@
                     </div>
                     <div @click="flyTo(source.focusOn, view, () => { })" class="cursor-pointer w-4"><img
                             src="../assets/icons/target.png" class="w-3 my-2 hover:rotate-45 rounded"></div>
-                    <div @click="() => {tableStore.addTable(source) }" class="cursor-pointer w-4"><img src="../assets/icons/table.png"
-                            class="w-3 my-2 hover:rotate-12 rounded"></div>
+                    <div @click="() => { tableStore.addTable(source) }" class="cursor-pointer w-4"><img
+                            src="../assets/icons/table.png" class="w-3 my-2 hover:rotate-12 rounded"></div>
                     <div :title="source.source" @click="mapStore.addToSelectedLayer(source.layername)"
-                        :class="selectedLayer == source.layername ? 'font-bold text-white' : ''">{{ source.source.slice(0, 20) }}
+                        :class="selectedLayer == source.layername ? 'font-bold text-white' : ''">{{ source.source.slice(0,
+                            20) }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="my-[1rem] flex mr-6 rounded-full shadow-lg ">
+    <div class="my-[1rem] hidden md:flex mr-6 rounded-full shadow-lg">
         <div @click="refresh = !refresh" class="cursor-pointer h-[2.1rem]"
             :class="refresh ? 'bg-blue-400' : 'bg-slate-400'"><img src="../assets/icons/refresh.svg" class="h-4 m-2">
         </div>
@@ -33,12 +34,31 @@
             class="inline text-md bg-slate-800 hover:bg-black text-white px-4 py-1 rounded-r-full cursor-pointer h-[2.1rem]">
             ADD</div>
     </div>
-    <RouterLink to="/" class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-8"
+    <RouterLink to="/" class="my-[1.2rem] text-white text-lg ml-2 mr-10 font-bold hover:underline  hover:underline-offset-8"
         :class="$route.path == '/' ? 'underline underline-offset-8' : ''">2D
     </RouterLink>
     <RouterLink to="/3d" class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-8"
         :class="$route.path == '/3d' ? 'underline underline-offset-8' : ''">3D
     </RouterLink>
+    <div class="mt-6 mr-4">
+        <img src="../assets/icons/icon-user.png" :alt="isLogedin ? 'Logout' : 'Login'" class="w-6 h-6"
+            @click="userMenu = !userMenu" :title="getUserName()||''">
+        <div v-if="userMenu" class="absolute top-[4rem] right-[0.5rem] rounded-sm py-1">
+            <div v-if="isLogedin()">
+                <div @click="()=>{logout()}"
+                    class="text-xs bg-blue-800 hover:bg-blue-900 text-white px-4 py-1 cursor-pointer">
+                    LOGOUT</div>
+            </div>
+            <div v-else class="flex flex-col">
+                <RouterLink to="/login"
+                    class="text-xs bg-blue-800 hover:bg-blue-900 text-white px-4 py-1 cursor-pointer">Login
+                </RouterLink>
+                <RouterLink to="/register"
+                    class="text-xs bg-blue-800 hover:bg-blue-900 text-white px-4 py-1 cursor-pointer">Sign Up
+                </RouterLink>
+            </div>
+        </div>
+    </div>
 </template>
 <script setup>
 import { RouterLink } from 'vue-router'
@@ -49,14 +69,16 @@ import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import flyTo from '../utils/ol/FlyTo2D';
 import { useTables } from '../stores/Tables';
+import { isLogedin, getUserName, logout } from '../utils/auth/auth';
 const layerSources = useLayerSources()
 const { sourceList } = storeToRefs(layerSources)
 const mapStore = useMap()
 const { view, selectedLayer } = storeToRefs(mapStore)
 const tableStore = useTables()
-const {tables } = storeToRefs(tableStore)
+const { tables } = storeToRefs(tableStore)
 const newSource = ref('')
 const newSourceType = ref('')
+const userMenu = ref(false)
 const sourceMenu = ref(false)
 const formats = ['GPX', 'GeoJSON', 'TopoJSON', 'IGC', 'KML', '']
 const acceptedTypes = {
@@ -104,6 +126,4 @@ const resolveSourceType = () => {
 watch(sourceToRemove, () => { removeSource() })
 
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
