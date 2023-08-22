@@ -3,26 +3,44 @@ import TwoDim from '../views/TwoDim.vue'
 import ThreeDim from '../views/ThreeDim.vue'
 import Login from '../views/login.vue';
 import Register from '../views/register.vue';
+import Error from '../views/error.vue';
+import { isLogedin } from '../utils/auth/auth';
 
 const router = createRouter({
+  mode: "history",
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: '2d',
+      meta: {
+        requiresAuth: true
+      },
       component: TwoDim
-    },{
+    }, {
       path: '/3d',
       name: '3d',
+      meta: {
+        requiresAuth: true
+      },
       component: ThreeDim
-    },{
+    }, {
       path: '/login',
       name: 'login',
-      component: Login 
-    },{
+      component: Login
+    }, {
       path: '/register',
       name: 'register',
-      component: Register 
+      component: Register
+    },
+    {
+      path: '/error/:ecode',
+      name: 'error',
+      component: Error
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/error/404',
     }
     // ,
     // {
@@ -35,5 +53,15 @@ const router = createRouter({
     // }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // If the user is not logged in, redirect to /login
+  const isLoggedIn = isLogedin();
+  if (to.meta.requiresAuth === true && !isLoggedIn) {
+    console.log(isLoggedIn);
+    return next({ path: "/login" });
+  }
+  next();
+});
 
 export default router
