@@ -4,7 +4,7 @@
         <div
             class="m-auto relative z-10 w-fit top-20 py-4 px-6 bg-slate-300/50 backdrop-blur-sm rounded-md border focus-within:bg-slate-300/60">
             <h1 class="text-4xl font-bold text-center my-6 text-white">Login</h1>
-            <form @submit.prevent="login" class="flex flex-col ">
+            <form @submit.prevent="signin" class="flex flex-col ">
                 <div class="form-group mb-4">
                     <label for="inputEmail1" class="block text-white ">Email</label>
                     <input type="email" class="rounded-full px-2 mt-1 py-1 md:w-[40ch] bg-blue-100 border-b-2"
@@ -23,53 +23,14 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
 import AnimatedBG from '../components/background/AnimatedBG.vue';
-import router from '../router';
-import { useNotification } from '../stores/Notification';
-const notification = useNotification()
+import { login} from '../utils/auth/auth';
+
 const email = ref('')
 const password = ref('')
 
-const login = () => {
-    let url = import.meta.env.VITE_API_URL + '/login';
-    let data = new FormData();
-    data.append('email', email.value);
-    data.append('password', password.value);
-
-    let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: url,
-        headers: {
-            'Accept': 'application/json'
-        },
-        data: data
-    };
-
-    axios.request(config)
-        .then((response) => {
-            if (response.data.success) {
-                let name = response.data.data.name || ''
-                let cred = JSON.stringify(response.data.data);
-                localStorage.setItem("user", cred);
-                notification.pushNotification({
-                    type:'success',
-                    title: 'Login',
-                    content: 'Loged in as ' + name,
-                    closable :true
-                })
-                router.push({ path: '/' })
-            }
-        })
-        .catch((error) => {
-            notification.pushNotification({
-                type: 'error',
-                title: 'Login',
-                content: error.response.data.message,
-                closable : true
-            })
-        });
+const signin = ()=>{
+    login(email.value, password.value)
 }
 </script>
 <style scoped></style>

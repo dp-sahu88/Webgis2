@@ -4,7 +4,7 @@
         <div
             class="m-auto relative z-10 w-fit top-10 py-2 px-6 bg-slate-300/50 backdrop-blur-sm rounded-md border focus-within:bg-slate-300/60">
             <h1 class="text-4xl font-bold text-center my-6 text-white">Sign up</h1>
-            <form @submit.prevent="register" class="flex flex-col ">
+            <form @submit.prevent="signup" class="flex flex-col ">
                 <div class="form-group mb-4">
                     <label for="inputName" class="block text-white ">Name</label>
                     <input type="text" class="rounded-full px-2 mt-1 py-1 md:w-[40ch] bg-blue-100 border-b-2" id="inputName"
@@ -34,61 +34,15 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
-import router from '../router';
 import AnimatedBG from '../components/background/AnimatedBG.vue';
-import { useNotification } from '../stores/Notification';
-const notification = useNotification()
+import { register} from '../utils/auth/auth';
+
 const name = ref('');
 const email = ref('')
 const password = ref('')
 const c_password = ref('')
-const register = () => {
-    let data = new FormData();
-    let url = import.meta.env.VITE_API_URL + '/register';
-    data.append('name', name.value);
-    data.append('email', email.value);
-    data.append('password', password.value);
-    data.append('c_password', c_password.value);
-
-    let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: url,
-        headers: {
-            'Accept': 'application/json'
-        },
-        data: data
-    };
-
-    axios.request(config)
-        .then((response) => {
-            if (response.data.success) {
-                let cred = JSON.stringify(response.data.data);
-                localStorage.setItem("user", cred);
-                notification.pushNotification({
-                    type:'success',
-                    title: 'Signup',
-                    closable: true,
-                    content : 'registration completed'
-                });
-                router.push({ path: '/' })
-            }else{
-                notification.pushNotification({
-                    type: 'error',
-                    title: 'Signup',
-                    content : response.data.message
-                });
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            notification.pushNotification({
-                type: 'error',
-                title: 'Signup',
-                content : error.response.data.message
-            })
-        });
+const signup = ()=>{
+    register(name.value, email.value, password.value, c_password.value)
 }
 </script>
 <style scoped></style>
