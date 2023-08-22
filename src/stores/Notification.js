@@ -3,20 +3,13 @@ import { defineStore } from 'pinia'
 
 export const useNotification = defineStore('Notification', () => {
   const notifications = ref([
-    {
-      id: 1, //timestamp
-      title: 'Notification Title',
-      content: 'This is a notification content', 
-      type: 'error', // info, warn, error,success
-      closable: true //true or false
-    },
-    {
-      id: 2, //timestamp
-      title: 'Notification Title',
-      content: 'This is atent', 
-      type: 'success', // info, warn, error,success
-      closable: true //true or false
-    }
+    // {
+    //   id: 1, //timestamp
+    //   title: 'Notification Title',
+    //   content: 'This is a notification content', 
+    //   type: 'error', // info, warn, error,success
+    //   closable: true //true or false
+    // }
 ])
 
 const pushNotification = (notification) => {
