@@ -25,6 +25,7 @@ import { GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import Row from "./AttrTable/Row.vue";
+import { getToken } from "../utils/auth/auth";
 const props = defineProps(['table', 'name'])
 defineEmits(['closeTable'])
 const table = props.table
@@ -32,7 +33,13 @@ const attrs = ref([])
 const minimized = ref(false)
 const data = ref([])
 function getData() {
-    axios(table.source).then(response => {
+    let header = {}
+    if (table.sourceOrigin === "internal") {
+      header = {
+        'Authorization': 'Bearer ' + getToken()
+      }
+    }
+    axios(table.source, {headers: header}).then(response => {
         data.value = resolveSource(response, table).slice(0, 3000)
         attrs.value = data.value[0].getKeys()
     })

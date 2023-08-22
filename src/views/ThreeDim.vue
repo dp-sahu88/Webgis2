@@ -1,7 +1,7 @@
 <template>
   <div id="cesiumContainer" ref="CesiumContainer" class="h-[100vh] pt-[4rem]"></div>
   <div class="absolute bottom-10 right-2" @click="toggleDraw">🖌</div>
-  <div v-if="draw" class="absolute flex flex-col item-center pointer-events-none" :style="pinPosition" >
+  <div v-if="draw" class="absolute flex flex-col item-center pointer-events-none" :style="pinPosition">
     <div class="h-4 w-4 rounded-full bg-red-600 "></div>
     <div class="h-[45px] w-[2px] bg-black m-auto"></div>
   </div>
@@ -11,23 +11,24 @@ import { Viewer, Cartesian3, Color } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
-import { viewerAddDrawEventListener, viewerRemoveDrawEventListener   } from '../utils/cesium/Draw'
+import { getToken } from '../utils/auth/auth';
+import { viewerAddDrawEventListener, viewerRemoveDrawEventListener } from '../utils/cesium/Draw'
 const CesiumContainer = ref(null)
 const drones = ref([])
 const draw = ref(false)
 let viewer = null
-const pinPosition = ref({left:0, top:0})
+const pinPosition = ref({ left: 0, top: 0 })
 onMounted(() => {
   getData();
   viewer = new Viewer('cesiumContainer', { shouldAnimate: true });
   viewer.animation.container.style.visibility = 'hidden';
   viewer.timeline.container.style.visibility = 'hidden';
   viewer.bottomContainer.style.visibility = 'hidden'
-  CesiumContainer.value.addEventListener('mousemove',updatePinPosition)
+  CesiumContainer.value.addEventListener('mousemove', updatePinPosition)
 })
 setInterval(getData, 5000);
 function viewerSetup() {
-  if (draw.value==true) {
+  if (draw.value == true) {
     return;
   }
   viewer.entities.removeAll();
@@ -58,8 +59,16 @@ function viewerSetup() {
 
 function getData() {
   let url = import.meta.env.VITE_API_URL + '/drone-positions'
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: url,
+    headers: {
+      'Authorization': 'Bearer ' + getToken(),
+    }
+  };
   axios
-    .get(url)
+    .request(config)
     .then((response) => {
       let res = response.data.features.map(ele => {
         let coordinates = ele.geometry.coordinates
@@ -87,9 +96,9 @@ const toggleDraw = function () {
   draw.value = !draw.value
 }
 
-const updatePinPosition = (event)=>{
-    pinPosition.value.left = event.clientX-8+'px'
-    pinPosition.value.top = event.clientY+'px'
+const updatePinPosition = (event) => {
+  pinPosition.value.left = event.clientX - 8 + 'px'
+  pinPosition.value.top = event.clientY + 'px'
 }
 
 watch(drones, (newVal, oldVal) => { viewerSetup() })
