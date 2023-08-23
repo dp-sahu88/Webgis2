@@ -9,7 +9,7 @@
 <script setup>
 import { Viewer, Cartesian3, Color } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onUnmounted } from 'vue';
 import axios from 'axios';
 import { getToken } from '../utils/auth/auth';
 import { viewerAddDrawEventListener, viewerRemoveDrawEventListener } from '../utils/cesium/Draw'
@@ -26,7 +26,7 @@ onMounted(() => {
   viewer.bottomContainer.style.visibility = 'hidden'
   CesiumContainer.value.addEventListener('mousemove', updatePinPosition)
 })
-setInterval(getData, 5000);
+let intervalId = setInterval(getData, 5000);
 function viewerSetup() {
   if (draw.value == true) {
     return;
@@ -102,6 +102,8 @@ const updatePinPosition = (event) => {
 }
 
 watch(drones, (newVal, oldVal) => { viewerSetup() })
-
+onUnmounted(()=>{
+  clearInterval(intervalId)
+})
 </script>
 <style scoped></style>
