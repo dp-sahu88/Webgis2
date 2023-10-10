@@ -6,37 +6,63 @@
                 <ol-source-osm />
             </ol-tile-layer>
 
-            <ol-overlay :position="[ item.latitude,item.longitude+ zoom/100]" v-for="item in dronesData" :key="item">
-                <div class="overlay-content">
-                    {{ item.speed }}
+            <ol-overlay :position="[item.longitude, item.latitude]" v-for="item in dronesNewData" :key="item">
+                <div class="pl-4">
+                    <div class="bg-yellow-300 text-slate-700 text-xs hover:text-sm hover:text-black shadow-lg">
+                        <div class="hover:font-bold">
+                            Name:{{ item.name }}
+                        </div>
+                        <div class="hover:font-bold">
+                            Speed:{{ item.speed }}
+                        </div>
+                        <div class="hover:font-bold">
+                            Alt:{{ item.height }}
+                        </div>
+                    </div>
+                </div>
+
+            </ol-overlay>
+            <ol-overlay :position="[item.longitude, item.latitude]" v-for="item in dronesNewData" :key="item">
+                <div class="h-2 w-2 rounded-full bg-red-500 pointer-events-none">
+
                 </div>
             </ol-overlay>
-            <ol-overlay :position="[ item.latitude,item.longitude]" v-for="item in dronesData" :key="item">
-                <div class="h-1 w-1 rounded-full bg-red-500">
-                    
-                </div>
-            </ol-overlay>
+
+            <ol-vector-layer>
+                <ol-source-vector>
+                    <ol-feature v-for="droneName in droneNames" :key="droneName">
+                        <ol-geom-line-string :coordinates="droneLoctionHistory[droneName].locationHistory" :key="droneName">
+                        </ol-geom-line-string>
+                        <ol-style>
+                            <ol-style-stroke :color="droneLoctionHistory[droneName].strockColor"
+                                :width="strokeWidth"></ol-style-stroke>
+                        </ol-style>
+                    </ol-feature>
+                </ol-source-vector>
+            </ol-vector-layer>
         </ol-map>
     </div>
 </template>
 <script setup>
 import axios from 'axios';
 import { getToken } from '../utils/auth/auth';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useDrones } from '../stores/Drones';
 import { storeToRefs } from 'pinia';
 const droneStore = useDrones()
-const { drones, dronesData } = storeToRefs(droneStore)
-const center = ref([116.547539, 40.450996]);
+const { droneLoctionHistory, droneNames, dronesNewData } = storeToRefs(droneStore)
+const center = ref([0, 0]);
 const projection = ref("EPSG:4326");
 const zoom = ref(1.1);
 const mapRef = ref(null)
 const rotation = ref(0);
 const view = ref(null);
-
+const strokeColor = "#ffffff"
+const strokeWidth = 1.5
+const zoomLevel = computed(() => view.value?.getZoom() || 0)
 onMounted(() => {
     getData()
-    setInterval(()=>{console.log(view.value.getZoom()); getData()}, 1000);
+    setInterval(() => { getData() }, 1000);
 })
 function getData() {
     let url = import.meta.env.VITE_API_URL + '/drone-positions'
@@ -70,17 +96,10 @@ function getData() {
                     name: name
                 }
             })
-            dronesData.value = res
+            dronesNewData.value = res
+            droneStore.updateData(res)
         })
 }
 </script>
 
-<style scoped>
-.overlay-content {
-    background: #efefef;
-    box-shadow: 0 5px 10px rgb(2 2 2 / 20%);
-    padding: 10px 20px;
-    font-size: 16px;
-    color: black;
-}
-</style>
+<style scoped></style>
