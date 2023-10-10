@@ -7,7 +7,7 @@
   </div>
 </template>
 <script setup>
-import { Viewer, Cartesian3, Color } from 'cesium';
+import { Viewer, Cartesian3, Color, Ion } from 'cesium';
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { ref, onMounted, watch, onUnmounted } from 'vue';
 import axios from 'axios';
@@ -18,6 +18,7 @@ const drones = ref([])
 const draw = ref(false)
 let viewer = null
 const pinPosition = ref({ left: 0, top: 0 })
+Ion.defaultAccessToken=  import.meta.env.VITE_CESIUM_ION_TOKEN;
 onMounted(() => {
   getData();
   viewer = new Viewer('cesiumContainer', { shouldAnimate: true });

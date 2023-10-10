@@ -10,7 +10,7 @@ const route = useRoute()
 const ecode = route.params.ecode
 const image = ref('')
 onMounted(() => { 
-    https://httpstatusdogs.com/img/100.jpg
+    // https://httpstatusdogs.com/img/100.jpg
     image.value = `https://httpstatusdogs.com/img/${ecode}.jpg`
  })
 </script>

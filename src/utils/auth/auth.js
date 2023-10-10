@@ -88,7 +88,8 @@ export function register(name,email,password,c_password) {
             notification.pushNotification({
                 type: 'error',
                 title: 'Signup',
-                content: error.response.data.message
+                content: error.response.data.message,
+                closable: true
             })
         });
 }
