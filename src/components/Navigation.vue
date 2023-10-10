@@ -40,6 +40,9 @@
     <RouterLink to="/3d" class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-8"
         :class="$route.path == '/3d' ? 'underline underline-offset-8' : ''">3D
     </RouterLink>
+    <RouterLink to="/drones" class="my-[1.2rem] text-white text-lg mr-10 font-bold hover:underline  hover:underline-offset-8"
+        :class="$route.path == '/drones' ? 'underline underline-offset-8' : ''">Drones
+    </RouterLink>
     <div class="mt-6 mr-4">
         <img src="../assets/icons/icon-user.png" :alt="isLogedin ? 'Logout' : 'Login'" class="w-6 h-6"
             @click="userMenu = !userMenu" :title="getUserName()||''">

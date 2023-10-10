@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TwoDim from '../views/TwoDim.vue'
 import ThreeDim from '../views/ThreeDim.vue'
 import Login from '../views/login.vue';
+import Drones from '../views/Drones.vue'
 import Register from '../views/register.vue';
 import Error from '../views/error.vue';
 import { isLogedin } from '../utils/auth/auth';
@@ -24,6 +25,13 @@ const router = createRouter({
         requiresAuth: true
       },
       component: ThreeDim
+    }, {
+      path: '/drones',
+      name: 'DroneTracker',
+      meta: {
+        requiresAuth: true
+      },
+      component: Drones
     }, {
       path: '/login',
       name: 'login',
